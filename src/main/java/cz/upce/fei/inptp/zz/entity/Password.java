@@ -15,8 +15,7 @@ public class Password {
 
     private int id;
     private String password;
-    //private HashMap<ParameterType, Parameter> parameters;
-    private HashMap<String, Parameter> parameters;
+    private HashMap<ParameterType, Parameter> parameters;
 
     public Password() {
     }
@@ -26,7 +25,7 @@ public class Password {
         this.password = password;
     }
 
-    public Password(int id, String password, HashMap<String, Parameter> parameters) {
+    public Password(int id, String password, HashMap<ParameterType, Parameter> parameters) {
         this.id = id;
         this.password = password;
         this.parameters = parameters;
@@ -40,18 +39,15 @@ public class Password {
         return password;
     }
 
-    public HashMap<String, Parameter> getParameters() {
+    public HashMap<ParameterType, Parameter> getParameters() {
         return parameters;
     }
 
-    boolean hasParameter(String TITLE) {
-        return parameters.containsKey(TITLE);
+    boolean hasParameter(ParameterType parameterType) {
+        return parameters.containsKey(parameterType);
     }
-    
-    public Parameter getParameter(String t) {
-        return parameters.get(t);
-    }
-    
-    
 
+    public Parameter getParameter(ParameterType parameterType) {
+        return parameters.get(parameterType);
+    }
 }
