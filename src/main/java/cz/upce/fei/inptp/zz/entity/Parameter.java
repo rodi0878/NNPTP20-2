@@ -14,11 +14,10 @@ import java.time.LocalDateTime;
 public class Parameter {
     
     public static class StandardizedParameters {
-        public static final String  TITLE = "title" ;
-        public static final String  EXPIRATION_DATETIME  = "expiration-datetime" ;
-        public  static  final String  WEBSITE = "website" ;
-        public static final String  DESCRIPTION = "description" ;
-        
+        public static final String TITLE = "title";
+        public static final String EXPIRATION_DATETIME = "expiration-datetime";
+        public static final String WEBSITE = "website";
+        public static final String DESCRIPTION = "description";
     }
     
     // TODO: add support for validation rules
@@ -40,28 +39,25 @@ public class Parameter {
         public void setValue(String value) {
             this.value = value;
         }
-        
     }
     
     public static class DateTimeParameter extends Parameter {
-        private LocalDateTime value;
+        private LocalDateTime date;
 
         public DateTimeParameter() {
         }
 
-        public DateTimeParameter(LocalDateTime value) {
-            this.value = value;
+        public DateTimeParameter(LocalDateTime date) {
+            this.date = date;
         }
 
-        public LocalDateTime getValue() {
-            return value;
+        public LocalDateTime getDate() {
+            return date;
         }
 
-        public void setValue(LocalDateTime value) {
-            this.value = value;
+        public void setDate(LocalDateTime date) {
+            this.date = date;
         }
-        
-        
     }
     
     public static class PasswordParameter extends Parameter {
@@ -81,7 +77,5 @@ public class Parameter {
         public void setPassword(String password) {
             this.password = password;
         }
-        
-        
     }
 }
