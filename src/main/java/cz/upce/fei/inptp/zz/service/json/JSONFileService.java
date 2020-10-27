@@ -3,17 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cz.upce.fei.inptp.zz.entity;
+package cz.upce.fei.inptp.zz.service.json;
+
+import cz.upce.fei.inptp.zz.entity.Password;
 
 import java.util.List;
 
 /**
+ * Service for creating JSON files.
  *
  * @author Roman
+ *
  */
-public class JSON {
-    
-    
+public class JSONFileService implements JSONService {
+
+    @Override
     public String toJson(List<Password> passwords)  {
         // TODO: support all parameters!!!
         // TODO: support for categories - save them at once/save absolute path as array and later reconstruct?
@@ -32,6 +36,7 @@ public class JSON {
         return output;
     }
     
+    @Override
     public List<Password> fromJson(String json) {
         throw new RuntimeException("NYI");
     }

@@ -6,7 +6,9 @@
 package cz.upce.fei.inptp.zz.entity;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  *
@@ -16,38 +18,38 @@ public class PasswordDatabase {
     private File file;
     private String passwd;
     
-    private List<Password> passwords;
+    private List<Password> passwords = new ArrayList<>();
 
-    public PasswordDatabase(File file, String passwd) {
+    public PasswordDatabase(File file, String passwd, List<Password> passwords) {
         this.file = file;
         this.passwd = passwd;
+        this.passwords = passwords;
     }
-    
-    public void load() {
-        // TODO: use JSON and CryptoFile to load
-        // TODO: throw exceptions when error
-    }
-    
-    public void save() {
-        // TODO: use JSON and CryptoFile t save
-    }
-    
+
     public void add(Password password) {
         passwords.add(password);
     }
     
     public Password findEntryByTitle(String title) {
-        for (Password password : passwords) {
-            
-            if (password.hasParameter(Parameter.StandardizedParameters.TITLE)) {
-                Parameter.TextParameter titleParam;
-                titleParam = (Parameter.TextParameter)password.getParameter(Parameter.StandardizedParameters.TITLE);
-                if (titleParam.getValue().equals(titleParam)) {
-                    return password;
-                }
-            }
-        }
-        return null;
+        return passwords
+                .stream()
+                .filter(password ->
+                        password.hasParameter(Parameter.StandardizedParameters.TITLE)
+                                && Objects.equals(((Parameter.TextParameter) password.getParameter(Parameter.StandardizedParameters.TITLE)).getValue(), title)
+                )
+                .findFirst()
+                .orElse(null);
     }
-    
+
+    public File getFile() {
+        return file;
+    }
+
+    public String getPasswd() {
+        return passwd;
+    }
+
+    public List<Password> getPasswords() {
+        return passwords;
+    }
 }

@@ -1,9 +1,14 @@
 package cz.upce.fei.inptp.zz.controller;
 
-import cz.upce.fei.inptp.zz.entity.CryptoFile;
-import cz.upce.fei.inptp.zz.entity.JSON;
+import cz.upce.fei.inptp.zz.entity.PasswordDatabase;
+import cz.upce.fei.inptp.zz.injector.InstanceInjector;
+import cz.upce.fei.inptp.zz.service.json.JSONFileService;
 import cz.upce.fei.inptp.zz.entity.Password;
+import cz.upce.fei.inptp.zz.service.password.JSONPasswordDatabaseService;
+import cz.upce.fei.inptp.zz.service.password.PasswordDatabaseService;
+
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,13 +26,16 @@ public class main {
         pwds.add(new Password(0, "sdfghjkl"));
         pwds.add(new Password(1, "ASDSAFafasdasdasdas"));
         pwds.add(new Password(2, "aaa-aaaa-"));
-        String contents = new JSON().toJson(pwds);
-        
-        CryptoFile.writeFile(new File("test.txt"), "password",  contents);
-        
-        String read = CryptoFile.readFile(new File("test.txt"), "password");
-        System.out.println(read);
-        
+
+        PasswordDatabaseService databaseService = InstanceInjector.injector().getInstance(PasswordDatabaseService.class);
+        databaseService.savePasswordDatabase(new PasswordDatabase(new File("test.txt"), "password", pwds));
+
+        try {
+            String read = databaseService.openPasswordDatabase(new File("test.txt"), "password").getPasswd();
+            System.out.println(read);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
    
 }
