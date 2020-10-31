@@ -6,7 +6,8 @@
 package cz.upce.fei.inptp.zz.service.json;
 
 import cz.upce.fei.inptp.zz.entity.Password;
-
+import java.util.ArrayList;
+import org.json.*;
 import java.util.List;
 
 /**
@@ -38,6 +39,18 @@ public class JSONFileService implements JSONService {
     
     @Override
     public List<Password> fromJson(String json) {
-        throw new RuntimeException("NYI");
+        List<Password> passwordsCollection = new ArrayList<>();
+        
+        JSONArray arrayOfPasswords = new JSONArray(json);
+        for (int i = 0; i < arrayOfPasswords.length(); i++)
+        {
+            JSONObject object = arrayOfPasswords.getJSONObject(i);
+            Object id = object.get("id");
+            Object password = object.get("password");
+            
+            passwordsCollection.add(new Password((int) id, (String) password));
+        }
+        
+        return passwordsCollection;
     }
 }
