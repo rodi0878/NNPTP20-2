@@ -7,20 +7,23 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.KeySpec;
+import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.CipherInputStream;
-import javax.crypto.CipherOutputStream;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SecretKey;
+import javax.crypto.*;
+import javax.crypto.spec.GCMParameterSpec;
+import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 import javax.inject.Inject;
 
@@ -29,6 +32,18 @@ import javax.inject.Inject;
  *
  */
 public class CryptoFileService implements CryptoService {
+
+    private static final String ENCRYPTION_ALGO = "AES/GCM/NoPadding";
+    private static final String BASE_ALGO = "AES";
+
+    private static final int TAG_LENGTH_BIT = 128;
+    private static final int IV_LENGTH_BYTE = 12;
+    private static final int SALT_LENGTH_BYTE = 16;
+    private static final Charset UTF_8 = StandardCharsets.UTF_8;
+
+    private static final int ITERATION_COUNT = 65536;
+    private static final int KEY_LENGTH = 128;
+    private static final String KEY_CREATION_ALGORITHM = "PBKDF2WithHmacSHA256";
 
     private JSONService jsonService;
 
@@ -43,31 +58,12 @@ public class CryptoFileService implements CryptoService {
 
         try {
             fileInputStream = new FileInputStream(file);
-            // TODO...
-            Cipher cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
-            CipherInputStream decipherInputStream = new CipherInputStream(fileInputStream, cipher);
-            SecretKey secretKey = new SecretKeySpec(password.getBytes(), "DES");
-            cipher.init(Cipher.DECRYPT_MODE, secretKey);
-            
-            DataInputStream dataInputStream = new DataInputStream(decipherInputStream);
+            DataInputStream dataInputStream = new DataInputStream(fileInputStream);
             String stringFromFile = dataInputStream.readUTF();
             dataInputStream.close();
-            cipher.doFinal();
             
-            return stringFromFile;
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(CryptoFileService.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(CryptoFileService.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchPaddingException ex) {
-            Logger.getLogger(CryptoFileService.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvalidKeyException ex) {
-            Logger.getLogger(CryptoFileService.class.getName()).log(Level.SEVERE, null, ex);
+            return decrypt(password, stringFromFile);
         } catch (IOException ex) {
-            Logger.getLogger(CryptoFileService.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalBlockSizeException ex) {
-            Logger.getLogger(CryptoFileService.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (BadPaddingException ex) {
             Logger.getLogger(CryptoFileService.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
@@ -85,28 +81,10 @@ public class CryptoFileService implements CryptoService {
         FileOutputStream fileOutputStream = null;
         try {
             fileOutputStream = new FileOutputStream(file);
-            Cipher cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
-            CipherOutputStream cipherOutputStream = new CipherOutputStream(fileOutputStream, cipher);
-            SecretKey secretKey = new SecretKeySpec(password.getBytes(), "DES");
-            cipher.init(Cipher.ENCRYPT_MODE, secretKey);
-            
-            DataOutputStream dataOutputStream = new DataOutputStream(cipherOutputStream);
-            dataOutputStream.writeUTF(textForWrite);
+            DataOutputStream dataOutputStream = new DataOutputStream(fileOutputStream);
+            dataOutputStream.writeUTF(encrypt(password, textForWrite));
             dataOutputStream.close();
-            cipher.doFinal();
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(CryptoFileService.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(CryptoFileService.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchPaddingException ex) {
-            Logger.getLogger(CryptoFileService.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvalidKeyException ex) {
-            Logger.getLogger(CryptoFileService.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(CryptoFileService.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalBlockSizeException ex) {
-            Logger.getLogger(CryptoFileService.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (BadPaddingException ex) {
             Logger.getLogger(CryptoFileService.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
@@ -115,6 +93,79 @@ public class CryptoFileService implements CryptoService {
                 Logger.getLogger(CryptoFileService.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+    }
+
+    @Override
+    public String encrypt(String password, String textToEncrypt){
+        try {
+            byte[] salt = generateRandomNonce(SALT_LENGTH_BYTE);
+            byte[] iv = generateRandomNonce(IV_LENGTH_BYTE);
+
+            SecretKey aesKeyFromPassword = getAESKeyFromPassword(password.toCharArray(), salt);
+            Cipher cipher = Cipher.getInstance(ENCRYPTION_ALGO);
+            cipher.init(Cipher.ENCRYPT_MODE, aesKeyFromPassword, new GCMParameterSpec(TAG_LENGTH_BIT, iv));
+
+            byte[] cipherText = cipher.doFinal(textToEncrypt.getBytes(UTF_8));
+            byte[] cipherTextWithIvSalt = ByteBuffer.allocate(iv.length + salt.length + cipherText.length)
+                    .put(iv)
+                    .put(salt)
+                    .put(cipherText)
+                    .array();
+            return Base64.getEncoder().encodeToString(cipherTextWithIvSalt);
+        } catch (NoSuchAlgorithmException |
+                NoSuchPaddingException |
+                InvalidKeyException |
+                BadPaddingException |
+                IllegalBlockSizeException |
+                InvalidAlgorithmParameterException |
+                InvalidKeySpecException ex) {
+            Logger.getLogger(CryptoFileService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "";
+    }
+
+    @Override
+    public String decrypt(String password, String textToDecrypt){
+        try {
+            byte[] decode = Base64.getDecoder().decode(textToDecrypt.getBytes(UTF_8));
+
+            ByteBuffer bb = ByteBuffer.wrap(decode);
+            byte[] iv = new byte[IV_LENGTH_BYTE];
+            bb.get(iv);
+            byte[] salt = new byte[SALT_LENGTH_BYTE];
+            bb.get(salt);
+            byte[] cipherText = new byte[bb.remaining()];
+            bb.get(cipherText);
+
+            SecretKey aesKeyFromPassword = getAESKeyFromPassword(password.toCharArray(), salt);
+            Cipher cipher = Cipher.getInstance(ENCRYPTION_ALGO);
+            cipher.init(Cipher.DECRYPT_MODE, aesKeyFromPassword, new GCMParameterSpec(TAG_LENGTH_BIT, iv));
+            byte[] plainText = cipher.doFinal(cipherText);
+            return new String(plainText, UTF_8);
+        }catch (NoSuchAlgorithmException |
+                NoSuchPaddingException |
+                InvalidKeyException |
+                BadPaddingException |
+                IllegalBlockSizeException |
+                InvalidAlgorithmParameterException |
+                InvalidKeySpecException ex) {
+            Logger.getLogger(CryptoFileService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "";
+    }
+
+    private byte[] generateRandomNonce(int length){
+        byte[] nonce = new byte[length];
+        new SecureRandom().nextBytes(nonce);
+        return nonce;
+    }
+
+    private SecretKey getAESKeyFromPassword(char[] password, byte[] salt)
+            throws NoSuchAlgorithmException, InvalidKeySpecException {
+
+        SecretKeyFactory factory = SecretKeyFactory.getInstance(KEY_CREATION_ALGORITHM);
+        KeySpec spec = new PBEKeySpec(password, salt, ITERATION_COUNT, KEY_LENGTH);
+        return new SecretKeySpec(factory.generateSecret(spec).getEncoded(), BASE_ALGO);
     }
 
     @Override

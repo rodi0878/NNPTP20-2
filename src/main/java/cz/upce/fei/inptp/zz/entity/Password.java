@@ -44,12 +44,12 @@ public class Password {
         return parameters;
     }
 
-    boolean hasParameter(String TITLE) {
-        return parameters.containsKey(TITLE);
+    public boolean hasParameter(String parameterName) {
+        return parameters.containsKey(parameterName);
     }
-    
-    public Parameter getParameter(String t) {
-        return parameters.get(t);
+
+    public Parameter getParameter(String parameterName) {
+        return parameters.get(parameterName);
     }
 
     public Category getCategory() {
@@ -59,8 +59,4 @@ public class Password {
     public void setCategory(Category category) {
         this.category = category;
     }
-    
-    
-    
-
 }

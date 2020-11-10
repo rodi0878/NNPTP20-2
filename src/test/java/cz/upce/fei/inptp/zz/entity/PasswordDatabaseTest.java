@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import static cz.upce.fei.inptp.zz.entity.Parameter.StandardizedParameters;
@@ -17,7 +18,7 @@ public class PasswordDatabaseTest {
 
     @Before
     public void setUp() {
-        database = new PasswordDatabase(null, "password0");
+        database = new PasswordDatabase(null, "password0", new ArrayList<>());
     }
 
     @Test
