@@ -5,6 +5,11 @@
  */
 package cz.upce.fei.inptp.zz.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import cz.upce.fei.inptp.zz.service.json.JSONFileCustomDeserializer;
+import cz.upce.fei.inptp.zz.service.json.JSONFileCustomSerializer;
+
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -16,6 +21,8 @@ public class Password {
 
     private int id;
     private String password;
+    @JsonSerialize(using = JSONFileCustomSerializer.class)
+    @JsonDeserialize(using = JSONFileCustomDeserializer.class)
     private HashMap<String, Parameter> parameters;
     private Category category;
 

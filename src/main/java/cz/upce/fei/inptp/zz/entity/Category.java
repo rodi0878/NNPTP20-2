@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Tree-based categories. Root category has the {@code  null} parent.
  */
-class Category {
+public class Category {
     private String name;
     private Category parent;
     private List<Category> children;

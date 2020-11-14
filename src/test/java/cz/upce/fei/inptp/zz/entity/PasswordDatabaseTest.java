@@ -45,12 +45,11 @@ public class PasswordDatabaseTest {
         assertNull(outputPassword1);
     }
 
-    private Password preparePassword(int id, String password, String tittle, String website, String description) {
+    public static Password preparePassword(int id, String password, String tittle, String website, String description) {
         HashMap<String, Parameter> parameters = new HashMap<>();
         parameters.put(StandardizedParameters.TITLE, new TextParameter(tittle));
         parameters.put(StandardizedParameters.WEBSITE, new TextParameter(website));
         parameters.put(StandardizedParameters.DESCRIPTION, new TextParameter(description));
-        parameters.put(StandardizedParameters.EXPIRATION_DATETIME, new Parameter.DateTimeParameter(LocalDateTime.now().plusYears(1L)));
         return new Password(id, password, parameters);
     }
 }

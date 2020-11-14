@@ -5,11 +5,13 @@
  */
 package cz.upce.fei.inptp.zz.service.json;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cz.upce.fei.inptp.zz.entity.Password;
 import cz.upce.fei.inptp.zz.exception.JsonConversionException;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import java.util.List;
 
@@ -20,23 +22,35 @@ import java.util.List;
  *
  */
 public class JSONFileService implements JSONService {
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public String toJson(List<Password> passwords) throws JsonConversionException {
+
+        objectMapper.registerModule(new JavaTimeModule());
+        StringBuilder result = new StringBuilder();
+        result.append("[");
         try {
-            return objectMapper.writeValueAsString(passwords);
+            for (Password password : passwords) {
+                result.append(objectMapper.writeValueAsString(password));
+                result.append(",");
+            }
+            result.deleteCharAt(result.length() - 1);
+            result.append("]");
         } catch (JsonProcessingException e) {
             throw new JsonConversionException("Error during mapping Passwords to JSON.", e);
         }
+        return result.toString();
     }
 
     @Override
     public List<Password> fromJson(String json) throws JsonConversionException {
+        List<Password> passwords = null;
         try {
-            return objectMapper.readValue(json, new TypeReference<List<Password>>() { });
+            passwords = objectMapper.readerFor(new TypeReference<List<Password>>() {}).readValue(json);
         } catch (JsonProcessingException e) {
-            throw new JsonConversionException("Error during converting JSON to Password entity.", e);
+            throw new JsonConversionException("Error during mapping Passwords to JSON.", e);
         }
+        return passwords;
     }
 }
