@@ -25,24 +25,24 @@ public class JSONFileServiceTest {
                 "]";
         jsonFormatWithParameters = "[" +
                 "{\"id\":0,\"password\":\"sdfghjkl\"," +
-                "   \"parameters\":null," +
-                "   \"category\":null}," +
+                    "\"parameters\":null," +
+                    "\"category\":null}," +
                 "{\"id\":1,\"password\":\"ASDSAFafasdasdasdas\"," +
-                "   \"parameters\":null," +
-                "   \"category\":null}," +
+                    "\"parameters\":null," +
+                    "\"category\":null}," +
                 "{\"id\":2,\"password\":\"aaa-aaaa-\"," +
-                "   \"parameters\":null," +
-                "   \"category\":null}," +
-                "{\"id\":3,\"password\":\"password1\",\"parameters\": [" +
-                "   [\"website\",{\"value\":\"gmail.com\"} ]," +
-                "   [\"description\",{\"value\":\"Password for my email\"}]," +
-                "   [\"title\",{\"value\":\"email\"} ] ]," +
-                "   \"category\":null}," +
-                "{\"id\":4,\"password\":\"password4\",\"parameters\":[ " +
-                "   [\"website\",{\"value\":\"tiktok.com\"}]," +
-                "   [\"description\",{\"value\":\"Password for social media\"}]," +
-                "   [\"title\",{\"value\":\"tiktok\"} ] ]," +
-                "   \"category\":null } " +
+                    "\"parameters\":null," +
+                    "\"category\":null}," +
+                "{\"id\":3,\"password\":\"password1\",\"parameters\":[" +
+                    "[\"website\",{\"value\":\"gmail.com\"}]," +
+                    "[\"description\",{\"value\":\"Password for my email\"}]," +
+                    "[\"title\",{\"value\":\"email\"}]]," +
+                    "\"category\":null}," +
+                "{\"id\":4,\"password\":\"password4\",\"parameters\":[" +
+                    "[\"website\",{\"value\":\"tiktok.com\"}]," +
+                    "[\"description\",{\"value\":\"Password for social media\"}]," +
+                    "[\"title\",{\"value\":\"tiktok\"}]]," +
+                    "\"category\":null}" +
                 "]";
     }
 
@@ -61,7 +61,7 @@ public class JSONFileServiceTest {
     @Test
     public void toJsonWithParameters() throws JsonConversionException {
         String converted = jsonService.toJson(passwordsWithParameters());
-        Assert.assertEquals(jsonFormatWithParameters, converted);
+        Assert.assertEquals(jsonFormatWithParameters.trim(), converted.trim());
     }
 
     @Test
