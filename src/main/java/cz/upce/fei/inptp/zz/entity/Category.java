@@ -1,27 +1,74 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cz.upce.fei.inptp.zz.entity;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Tree-based categories. Root category has the {@code  null} parent.
  */
-class Category {
+public class Category {
+
     private String name;
     private Category parent;
     private List<Category> children;
 
     public Category() {
+        name = "Unnamed Category";
+    }
+
+    public Category(String name) {
+        this.name = name;
+    }
+
+    public Category(String name, Category parent) {
+        this.name = name;
+        this.parent = parent;
     }
 
     public Category(String name, Category parent, List<Category> children) {
         this.name = name;
         this.parent = parent;
         this.children = children;
+    }
+
+    @Override
+    public String toString() {
+        String resultText = "";
+        resultText += "Category: " + name + "\n";
+        if (parent != null) {
+            resultText += "Parent: " + parent.name + "\n";
+        }
+        if (children == null) {
+            return resultText;
+        }
+        resultText += "Childrens: | ";
+        for (Category category : children) {
+            resultText += category.name + " | ";
+        }
+        return resultText;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(name);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() == obj.getClass()) {
+            return this.equals((Category) obj);
+        }
+        return false;
+    }
+
+    public boolean equals(Category other) {
+        return name.equals(other.name);
     }
 
     public String getName() {
@@ -47,6 +94,8 @@ class Category {
     public void setChildren(List<Category> children) {
         this.children = children;
     }
-    
-    
+
+    public boolean hasParent() {
+        return parent != null;
+    }
 }
