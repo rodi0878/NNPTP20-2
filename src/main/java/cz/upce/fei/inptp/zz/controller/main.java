@@ -28,10 +28,15 @@ public class main {
         pwds.add(new Password(2, "aaa-aaaa-"));
 
         PasswordDatabaseService databaseService = InstanceInjector.injector().getInstance(PasswordDatabaseService.class);
-        databaseService.savePasswordDatabase(new PasswordDatabase(new File("test.txt"), "password", pwds));
+        PasswordGeneratorService passwordGenerator = InstanceInjector.injector().getInstance(PasswordSecureGeneratorService.class);
+        
+        String password = passwordGenerator.GetNewRandomPassword(20);
+        
+        
+        databaseService.savePasswordDatabase(new PasswordDatabase(new File("test.txt"), password, pwds));
 
         try {
-            String read = databaseService.openPasswordDatabase(new File("test.txt"), "password").getPassword();
+            String read = databaseService.openPasswordDatabase(new File("test.txt"), password).getPassword();
             System.out.println(read);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
