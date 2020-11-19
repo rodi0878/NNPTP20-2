@@ -18,7 +18,7 @@ public class PasswordSecureGeneratorService implements PasswordGeneratorService 
     }
 
     @Override
-    public String GetNewRandomPassword(int passwordLength) {
+    public String getNewRandomPassword(int passwordLength) {
         StringBuilder password = new StringBuilder();
 
         for (int length = 0; length < passwordLength; length++) {

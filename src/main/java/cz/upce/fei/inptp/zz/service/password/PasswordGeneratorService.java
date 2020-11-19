@@ -8,5 +8,5 @@ public interface PasswordGeneratorService {
      * @param passwordLength Sets the desired length of the random password
      * @return New random password of the required length
      */
-    String GetNewRandomPassword(int passwordLength);
+    String getNewRandomPassword(int passwordLength);
 }

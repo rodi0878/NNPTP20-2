@@ -6,6 +6,8 @@ import cz.upce.fei.inptp.zz.service.json.JSONFileService;
 import cz.upce.fei.inptp.zz.entity.Password;
 import cz.upce.fei.inptp.zz.service.password.JSONPasswordDatabaseService;
 import cz.upce.fei.inptp.zz.service.password.PasswordDatabaseService;
+import cz.upce.fei.inptp.zz.service.password.PasswordSecureGeneratorService;
+import cz.upce.fei.inptp.zz.service.password.PasswordGeneratorService;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -30,7 +32,7 @@ public class main {
         PasswordDatabaseService databaseService = InstanceInjector.injector().getInstance(PasswordDatabaseService.class);
         PasswordGeneratorService passwordGenerator = InstanceInjector.injector().getInstance(PasswordSecureGeneratorService.class);
         
-        String password = passwordGenerator.GetNewRandomPassword(20);
+        String password = passwordGenerator.getNewRandomPassword(20);
         
         
         databaseService.savePasswordDatabase(new PasswordDatabase(new File("test.txt"), password, pwds));
