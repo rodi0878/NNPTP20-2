@@ -6,6 +6,8 @@ import cz.upce.fei.inptp.zz.service.json.JSONFileService;
 import cz.upce.fei.inptp.zz.entity.Password;
 import cz.upce.fei.inptp.zz.service.password.JSONPasswordDatabaseService;
 import cz.upce.fei.inptp.zz.service.password.PasswordDatabaseService;
+import cz.upce.fei.inptp.zz.service.password.PasswordSecureGeneratorService;
+import cz.upce.fei.inptp.zz.service.password.PasswordGeneratorService;
 
 import java.io.File;
 import java.io.FileNotFoundException;
