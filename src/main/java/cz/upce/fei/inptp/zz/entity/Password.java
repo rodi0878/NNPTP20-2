@@ -62,15 +62,19 @@ public class Password {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Password)) return false;
-        Password password1 = (Password) o;
-        return id == password1.id &&
-                Objects.equals(password, password1.password) &&
-                Objects.equals(category, password1.category);
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        final Password other = (Password) obj;
+        return id == other.id
+                && password.equals(other.password)
+                && category.equals(other.category);
     }
-
+    
     @Override
     public int hashCode() {
         return Objects.hash(id, password, category);
