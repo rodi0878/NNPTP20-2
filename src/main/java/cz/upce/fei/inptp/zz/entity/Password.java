@@ -17,7 +17,7 @@ public class Password {
     private int id;
     private String password;
     private HashMap<String, Parameter> parameters;
-    private Category category;
+    private ICategory category;
 
     public Password() {
     }
@@ -53,11 +53,11 @@ public class Password {
         return parameters.get(parameterName);
     }
 
-    public Category getCategory() {
+    public ICategory getCategory() {
         return category;
     }
 
-    public void setCategory(Category category) {
+    public void setCategory(ICategory category) {
         this.category = category;
     }
 

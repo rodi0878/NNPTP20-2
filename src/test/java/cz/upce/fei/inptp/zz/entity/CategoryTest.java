@@ -10,13 +10,13 @@ public class CategoryTest extends TestCase {
 
     @Override
     public void setUp(){
-        Category testRootCategory = new Category("test", null);
+        Category testRootCategory = new Category("test", NullCategory.getInstance());
         testCategory = new Category("work", testRootCategory);
         testRootCategory.getChildren().add(testCategory);
-        Category controlRootCategory = new Category("test", null);
+        Category controlRootCategory = new Category("test", NullCategory.getInstance());
         controlCategory = new Category("work", controlRootCategory);
         controlCategory.getChildren().add(controlCategory);
-        Category differentRootCategory = new Category("different", null);
+        Category differentRootCategory = new Category("different", NullCategory.getInstance());
         differentCategory = new Category("work", differentRootCategory);
         differentCategory.getChildren().add(differentCategory);
     }
