@@ -5,9 +5,7 @@
  */
 package cz.upce.fei.inptp.zz.entity;
 
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Tree-based categories. Root category has the {@code  NullCategory} parent.
@@ -15,12 +13,12 @@ import java.util.Set;
 public class Category implements ICategory {
     private String name;
     private ICategory parent;
-    private Set<ICategory> children;
+    private SortedSet<ICategory> children;
 
     public Category() {
     }
 
-    public Category(String name, ICategory parent, Set<ICategory> children) {
+    public Category(String name, ICategory parent, SortedSet<ICategory> children) {
         this.name = name;
         this.parent = parent;
         this.children = children;
@@ -29,7 +27,7 @@ public class Category implements ICategory {
     public Category(String name, ICategory parent) {
         this.name = name;
         this.parent = parent;
-        children = new HashSet<>();
+        children = new TreeSet<>();
     }
 
     @Override
@@ -53,12 +51,12 @@ public class Category implements ICategory {
     }
 
     @Override
-    public Set<ICategory> getChildren() {
+    public SortedSet<ICategory> getChildren() {
         return children;
     }
 
     @Override
-    public void setChildren(Set<ICategory> children) {
+    public void setChildren(SortedSet<ICategory> children) {
         this.children = children;
     }
 
@@ -74,5 +72,13 @@ public class Category implements ICategory {
     @Override
     public int hashCode() {
         return Objects.hash(name, parent);
+    }
+
+    @Override
+    public int compareTo(ICategory o) {
+        if (getName().compareTo(o.getName()) == 0){
+            return  getParent().compareTo(o.getParent());
+        }
+        return getName().compareTo(o.getName());
     }
 }

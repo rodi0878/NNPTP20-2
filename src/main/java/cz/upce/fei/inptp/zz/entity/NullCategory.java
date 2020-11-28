@@ -1,24 +1,30 @@
 package cz.upce.fei.inptp.zz.entity;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 public class NullCategory implements ICategory{
 
-    private static NullCategory instance;
+    private final TreeSet<ICategory> children;
+    private final String name;
 
-    private NullCategory(){}
+    private NullCategory(){
+        children = new TreeSet<>();
+        name = "";
+    }
+
+    private static class NullCategoryHelper
+    {
+        private static final NullCategory INSTANCE = new NullCategory();
+    }
 
     public static NullCategory getInstance(){
-        if (instance == null) {
-            instance = new NullCategory();
-        }
-        return instance;
+        return NullCategoryHelper.INSTANCE;
     }
 
     @Override
     public String getName() {
-        return "";
+        return name;
     }
 
     @Override
@@ -36,11 +42,17 @@ public class NullCategory implements ICategory{
     }
 
     @Override
-    public Set<ICategory> getChildren() {
-        return new HashSet<>();
+    public SortedSet<ICategory> getChildren() {
+        children.clear();
+        return children;
     }
 
     @Override
-    public void setChildren(Set<ICategory> children) {
+    public void setChildren(SortedSet<ICategory> children) {
+    }
+
+    @Override
+    public int compareTo(ICategory o) {
+        return name.compareTo(o.getName());
     }
 }

@@ -36,4 +36,16 @@ public class CategoryTest extends TestCase {
     public void testHashCodeDifferent() {
         assertNotSame(testCategory.hashCode(), differentCategory.hashCode());
     }
+
+    public void testCompareToSame(){
+        assertEquals(0, testCategory.compareTo(controlCategory));
+    }
+
+    public void testCompareToLesser(){
+        assertTrue(differentCategory.compareTo(testCategory) <0);
+    }
+
+    public void testCompareToGreater(){
+        assertTrue(testCategory.compareTo(differentCategory) >0);
+    }
 }
