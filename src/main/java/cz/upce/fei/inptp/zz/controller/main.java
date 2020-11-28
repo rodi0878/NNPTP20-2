@@ -31,8 +31,9 @@ public class main {
         try {
             String read = databaseService.openPasswordDatabase(new File("test.txt"), "password").getPassword();
             System.out.println(read);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace(System.out);
+            throw new FileNotFoundException("File not found");
+        } catch (FileNotFoundException exception) {
+            exception.printStackTrace(System.out);
         }
     }
 }
