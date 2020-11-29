@@ -19,12 +19,8 @@ public class Password {
     private HashMap<String, Parameter> parameters;
     private Category category;
 
-    private Password() {
-    }
+    private Password(){
 
-    private Password(int id, String password) {
-        this.id = id;
-        this.password = password;
     }
 
     private Password(int id, String password, HashMap<String, Parameter> parameters) {
@@ -102,7 +98,7 @@ public class Password {
         }
 
         public Password createPassword() {
-            return new Password(id, password);
+            return new Password(id, password, parameters);
         }
     }
 }
