@@ -24,9 +24,18 @@ public class JSONFileServiceTest {
                 "]";
 
         examplePasswordsList = new ArrayList<>();
-        examplePasswordsList.add(new Password(0, "sdfghjkl"));
-        examplePasswordsList.add(new Password(1, "ASDSAFafasdasdasdas"));
-        examplePasswordsList.add(new Password(2, "aaa-aaaa-"));
+        examplePasswordsList.add(new Password.PasswordBuilder()
+                .setId(0)
+                .setPassword("sdfghjkl")
+                .createPassword());
+        examplePasswordsList.add(new Password.PasswordBuilder()
+                .setId(1)
+                .setPassword("ASDSAFafasdasdasdas")
+                .createPassword());
+        examplePasswordsList.add(new Password.PasswordBuilder()
+                .setId(2)
+                .setPassword("aaa-aaaa-")
+                .createPassword());
     }
 
     @Test

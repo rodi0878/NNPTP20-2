@@ -15,10 +15,8 @@ class Category {
     private Category parent;
     private List<Category> children;
 
-    public Category() {
-    }
 
-    public Category(String name, Category parent, List<Category> children) {
+    private Category(String name, Category parent, List<Category> children) {
         this.name = name;
         this.parent = parent;
         this.children = children;
@@ -47,6 +45,30 @@ class Category {
     public void setChildren(List<Category> children) {
         this.children = children;
     }
-    
+
+    public static class CategoryBuilder {
+        private String name;
+        private Category parent;
+        private List<Category> children;
+
+        public CategoryBuilder setName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public CategoryBuilder setParent(Category parent) {
+            this.parent = parent;
+            return this;
+        }
+
+        public CategoryBuilder setChildren(List<Category> children) {
+            this.children = children;
+            return this;
+        }
+
+        public Category createCategory() {
+            return new Category(name, parent, children);
+        }
+    }
     
 }

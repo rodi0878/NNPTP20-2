@@ -19,15 +19,15 @@ public class Password {
     private HashMap<String, Parameter> parameters;
     private Category category;
 
-    public Password() {
+    private Password() {
     }
 
-    public Password(int id, String password) {
+    private Password(int id, String password) {
         this.id = id;
         this.password = password;
     }
 
-    public Password(int id, String password, HashMap<String, Parameter> parameters) {
+    private Password(int id, String password, HashMap<String, Parameter> parameters) {
         this.id = id;
         this.password = password;
         this.parameters = parameters;
@@ -78,5 +78,31 @@ public class Password {
     @Override
     public int hashCode() {
         return Objects.hash(id, password, category);
+    }
+
+
+    public static class PasswordBuilder {
+        private int id;
+        private String password;
+        private HashMap<String, Parameter> parameters;
+
+        public PasswordBuilder setId(int id) {
+            this.id = id;
+            return this;
+        }
+
+        public PasswordBuilder setPassword(String password) {
+            this.password = password;
+            return this;
+        }
+
+        public PasswordBuilder setParameters(HashMap<String, Parameter> parameters) {
+            this.parameters = parameters;
+            return this;
+        }
+
+        public Password createPassword() {
+            return new Password(id, password);
+        }
     }
 }
