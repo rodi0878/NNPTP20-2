@@ -8,10 +8,10 @@ public class PasswordSecureGeneratorServiceTest {
     @Test
     public void getNewRandomPassword() {
         int passwordLength = 20;
-        PasswordSecureGeneratorService passwordGenerator= new PasswordSecureGeneratorService();
+        PasswordSecureGeneratorService passwordGenerator = new PasswordSecureGeneratorService();
 
-        String firstPassword = passwordGenerator.GetNewRandomPassword(passwordLength);
-        String secondPassword = passwordGenerator.GetNewRandomPassword(passwordLength);
+        String firstPassword = passwordGenerator.getNewRandomPassword(passwordLength);
+        String secondPassword = passwordGenerator.getNewRandomPassword(passwordLength);
 
         assertNotEquals(firstPassword, secondPassword);
     }
