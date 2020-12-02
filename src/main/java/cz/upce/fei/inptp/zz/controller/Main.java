@@ -7,6 +7,7 @@ import cz.upce.fei.inptp.zz.arguments.DeletePasswordCommand;
 import cz.upce.fei.inptp.zz.arguments.EditPasswordCommand;
 import cz.upce.fei.inptp.zz.arguments.SelectPasswordsCommand;
 import cz.upce.fei.inptp.zz.entity.PasswordDatabase;
+import cz.upce.fei.inptp.zz.exception.IndexNotFoundException;
 import cz.upce.fei.inptp.zz.injector.InstanceInjector;
 import cz.upce.fei.inptp.zz.entity.Password;
 import cz.upce.fei.inptp.zz.service.password.PasswordDatabaseService;
@@ -56,6 +57,27 @@ public class Main {
                     String read = databaseService.openPasswordDatabase(new File("test.txt"), "password").getPassword();
                     System.out.println(read);
                 } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case EDIT_COMMAND:
+                try {
+                    PasswordDatabase passwordDatabase = databaseService.openPasswordDatabase(new File("test.txt"), "password");
+                    int passwordIndex = passwordDatabase.getPasswordIndex(editCommand.getId());
+                    Password wantedPassword = passwordDatabase.getPasswords().get(passwordIndex);
+                    passwordDatabase.editPassword(wantedPassword, editCommand.getNewValue().getPassword(), passwordIndex);
+                    databaseService.savePasswordDatabase(passwordDatabase);
+                } catch (FileNotFoundException | IndexNotFoundException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case DELETE_COMMAND:
+                try {
+                    PasswordDatabase passwordDatabase = databaseService.openPasswordDatabase(new File("test.txt"), "password");
+                    int passwordIndex = passwordDatabase.getPasswordIndex(deleteCommand.getId());
+                    passwordDatabase.getPasswords().remove(passwordIndex);
+                    databaseService.savePasswordDatabase(passwordDatabase);
+                } catch (FileNotFoundException | IndexNotFoundException e) {
                     e.printStackTrace();
                 }
                 break;
