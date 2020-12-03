@@ -10,6 +10,8 @@ import cz.upce.fei.inptp.zz.entity.PasswordDatabase;
 import cz.upce.fei.inptp.zz.injector.InstanceInjector;
 import cz.upce.fei.inptp.zz.entity.Password;
 import cz.upce.fei.inptp.zz.service.password.PasswordDatabaseService;
+import cz.upce.fei.inptp.zz.service.password.PasswordSecureGeneratorService;
+import cz.upce.fei.inptp.zz.service.password.PasswordGeneratorService;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -46,14 +48,17 @@ public class main {
         commandLineParser.parse(args);
 
         PasswordDatabaseService databaseService = InstanceInjector.injector().getInstance(PasswordDatabaseService.class);
+        PasswordGeneratorService passwordGenerator = InstanceInjector.injector().getInstance(PasswordSecureGeneratorService.class);
+        String password = passwordGenerator.getNewRandomPassword(20);
+      
         switch(commandLineParser.getParsedCommand()){
             case ADD_COMMAND:
                 List<Password> pwds = Arrays.asList(new Password(0, addCommand.getPassword().getPassword()));
-                databaseService.savePasswordDatabase(new PasswordDatabase(new File("test.txt"), "password", pwds));
+                databaseService.savePasswordDatabase(new PasswordDatabase(new File("test.txt"), password, pwds));
                 break;
             case SELECT_COMMAND:
                 try {
-                    String read = databaseService.openPasswordDatabase(new File("test.txt"), "password").getPassword();
+                    String read = databaseService.openPasswordDatabase(new File("test.txt"), password).getPassword();
                     System.out.println(read);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
