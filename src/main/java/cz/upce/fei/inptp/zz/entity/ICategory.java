@@ -1,6 +1,6 @@
 package cz.upce.fei.inptp.zz.entity;
 
-import java.util.SortedSet;
+import java.util.List;
 
 /**
  * Interface for Tree-based categories. Root category has the {@code  NullCategory} parent.
@@ -15,7 +15,7 @@ public interface ICategory extends Comparable<ICategory> {
 
     void setParent(ICategory parent);
 
-    SortedSet<ICategory> getChildren();
+    List<ICategory> getChildren();
 
-    void setChildren(SortedSet<ICategory> children);
+    void setChildren(List<ICategory> children);
 }

@@ -13,12 +13,12 @@ import java.util.*;
 public class Category implements ICategory {
     private String name;
     private ICategory parent;
-    private SortedSet<ICategory> children;
+    private List<ICategory> children;
 
     public Category() {
     }
 
-    public Category(String name, ICategory parent, SortedSet<ICategory> children) {
+    public Category(String name, ICategory parent, List<ICategory> children) {
         this.name = name;
         this.parent = parent;
         this.children = children;
@@ -27,7 +27,7 @@ public class Category implements ICategory {
     public Category(String name, ICategory parent) {
         this.name = name;
         this.parent = parent;
-        children = new TreeSet<>();
+        children = new ArrayList<>();
     }
 
     @Override
@@ -51,12 +51,12 @@ public class Category implements ICategory {
     }
 
     @Override
-    public SortedSet<ICategory> getChildren() {
+    public List<ICategory> getChildren() {
         return children;
     }
 
     @Override
-    public void setChildren(SortedSet<ICategory> children) {
+    public void setChildren(List<ICategory> children) {
         this.children = children;
     }
 

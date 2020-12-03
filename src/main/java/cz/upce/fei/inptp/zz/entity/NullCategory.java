@@ -1,15 +1,14 @@
 package cz.upce.fei.inptp.zz.entity;
 
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
 
 public class NullCategory implements ICategory{
 
-    private final TreeSet<ICategory> children;
+    private final List<ICategory> children;
     private final String name;
 
     private NullCategory(){
-        children = new TreeSet<>();
+        children = Collections.unmodifiableList(new ArrayList<>());
         name = "";
     }
 
@@ -42,13 +41,12 @@ public class NullCategory implements ICategory{
     }
 
     @Override
-    public SortedSet<ICategory> getChildren() {
-        children.clear();
+    public List<ICategory> getChildren() {
         return children;
     }
 
     @Override
-    public void setChildren(SortedSet<ICategory> children) {
+    public void setChildren(List<ICategory> children) {
     }
 
     @Override
