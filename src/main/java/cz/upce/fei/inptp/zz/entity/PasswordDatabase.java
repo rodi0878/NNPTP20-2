@@ -5,9 +5,8 @@
  */
 package cz.upce.fei.inptp.zz.entity;
 
-import cz.upce.fei.inptp.zz.exception.IndexNotFoundException;
-
 import java.io.File;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -55,25 +54,18 @@ public class PasswordDatabase {
         return passwords;
     }
 
-    public int getPasswordIndex(int passwordId) throws IndexNotFoundException {
-        int index = -1;
-
-        for (int i = 0; i < this.getPasswords().size(); i++) {
-            if (this.getPasswords().get(i).getId() == passwordId) {
-                index = i;
-                break;
+    public Password getPasswordById(int passwordId) throws InvalidParameterException {
+        for (Password password : this.getPasswords()){
+            if (password.getId() == passwordId){
+                return password;
             }
         }
-        if (index != -1) {
-            return index;
-        }
-        throw new IndexNotFoundException("Password's index not found");
+        throw new InvalidParameterException("Password ID not found");
     }
 
-    public void editPassword(Password oldPassword, String newStringPassword, int passwordIndex) {
-        if (oldPassword != null && newStringPassword != null && passwordIndex >= 0) {
-            oldPassword = new Password(oldPassword.getId(), newStringPassword, oldPassword.getParameters());
-            this.getPasswords().set(passwordIndex, oldPassword);
+    public void editPassword(Password passwordToEdit, String newPassword) {
+        if (passwordToEdit != null && newPassword != null){
+            passwordToEdit.setPassword(newPassword);
         }
     }
 }

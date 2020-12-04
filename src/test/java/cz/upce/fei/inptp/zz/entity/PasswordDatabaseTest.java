@@ -3,6 +3,7 @@ package cz.upce.fei.inptp.zz.entity;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.security.InvalidParameterException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,5 +53,25 @@ public class PasswordDatabaseTest {
         parameters.put(StandardizedParameters.DESCRIPTION, new TextParameter(description));
         parameters.put(StandardizedParameters.EXPIRATION_DATETIME, new Parameter.DateTimeParameter(LocalDateTime.now().plusYears(1L)));
         return new Password(id, password, parameters);
+    }
+
+    @Test
+    public void getPasswordByIdTest() throws InvalidParameterException {
+        Password expectedPassword = new Password(2, "password3");
+
+        this.database.add(preparePassword(0, "password1", "email", "seznam.cz", "Password for my email"));
+        this.database.add(preparePassword(1, "password2", "email", "gmail.com", "Password for my email"));
+        this.database.add(preparePassword(2, "password3", "tiktok", "tiktok.com", "Password for social media"));
+
+        Password password = this.database.getPasswordById(2);
+        assertEquals(password, expectedPassword);
+    }
+
+    @Test
+    public void editPasswordTest() {
+        String expectedPassword = "Password";
+        Password password = new Password(0, "paswd");
+        password.setPassword("Password");
+        assertEquals(password.getPassword(), expectedPassword);
     }
 }

@@ -53,5 +53,12 @@ public class PasswordTest {
         other = new Password(1, "abcd%1234");
         assertNotEquals(password, other);
     }
-    
+
+    @Test
+    public void setPasswordTest(){
+        String expectedPassword = "Password";
+        Password  password = new Password(0, "paswd");
+        password.setPassword("Password");
+        assertEquals(password.getPassword(), expectedPassword);
+    }
 }

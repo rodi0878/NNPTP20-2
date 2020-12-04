@@ -1,19 +1,18 @@
 package cz.upce.fei.inptp.zz.controller;
 
 import com.beust.jcommander.JCommander;
-import com.beust.jcommander.ParameterException;
 import cz.upce.fei.inptp.zz.arguments.AddPasswordCommand;
 import cz.upce.fei.inptp.zz.arguments.DeletePasswordCommand;
 import cz.upce.fei.inptp.zz.arguments.EditPasswordCommand;
 import cz.upce.fei.inptp.zz.arguments.SelectPasswordsCommand;
 import cz.upce.fei.inptp.zz.entity.PasswordDatabase;
-import cz.upce.fei.inptp.zz.exception.IndexNotFoundException;
 import cz.upce.fei.inptp.zz.injector.InstanceInjector;
 import cz.upce.fei.inptp.zz.entity.Password;
 import cz.upce.fei.inptp.zz.service.password.PasswordDatabaseService;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.security.InvalidParameterException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -63,21 +62,20 @@ public class Main {
             case EDIT_COMMAND:
                 try {
                     PasswordDatabase passwordDatabase = databaseService.openPasswordDatabase(new File("test.txt"), "password");
-                    int passwordIndex = passwordDatabase.getPasswordIndex(editCommand.getId());
-                    Password wantedPassword = passwordDatabase.getPasswords().get(passwordIndex);
-                    passwordDatabase.editPassword(wantedPassword, editCommand.getNewValue().getPassword(), passwordIndex);
+                    Password passwordToEdit = passwordDatabase.getPasswordById(editCommand.getId());
+                    passwordDatabase.editPassword(passwordToEdit, editCommand.getNewValue().getPassword());
                     databaseService.savePasswordDatabase(passwordDatabase);
-                } catch (FileNotFoundException | IndexNotFoundException e) {
+                } catch (FileNotFoundException | InvalidParameterException e) {
                     e.printStackTrace();
                 }
                 break;
             case DELETE_COMMAND:
                 try {
                     PasswordDatabase passwordDatabase = databaseService.openPasswordDatabase(new File("test.txt"), "password");
-                    int passwordIndex = passwordDatabase.getPasswordIndex(deleteCommand.getId());
-                    passwordDatabase.getPasswords().remove(passwordIndex);
+                    Password passwordToDelete = passwordDatabase.getPasswordById(editCommand.getId());
+                    passwordDatabase.getPasswords().remove(passwordToDelete);
                     databaseService.savePasswordDatabase(passwordDatabase);
-                } catch (FileNotFoundException | IndexNotFoundException e) {
+                } catch (FileNotFoundException | InvalidParameterException e) {
                     e.printStackTrace();
                 }
                 break;
