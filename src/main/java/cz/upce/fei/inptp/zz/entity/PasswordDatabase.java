@@ -5,6 +5,7 @@
  */
 package cz.upce.fei.inptp.zz.entity;
 
+import cz.upce.fei.inptp.zz.service.password.PasswordValidatorServiceModule;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,13 @@ public class PasswordDatabase {
     }
 
     public void add(Password password) {
+        PasswordValidatorServiceModule passwordValidator = new PasswordValidatorServiceModule();
+        switch(passwordValidator.getPasswordStrength(password)) {
+            case WEAK:
+                System.out.println("Your password is too weak. Consider changing your password.");
+                break;
+        }
+        
         passwords.add(password);
     }
     
