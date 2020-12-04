@@ -29,7 +29,7 @@ public class PasswordValidatorServiceTest {
         PasswordValidatorServiceModule passwordValidator = new PasswordValidatorServiceModule();
         assertEquals(PasswordStrength.WEAK, passwordValidator.getPasswordStrength(passwords[0]));
         assertEquals(PasswordStrength.WEAK, passwordValidator.getPasswordStrength(passwords[1]));
-        assertEquals(PasswordStrength.WEAK, passwordValidator.getPasswordStrength(passwords[2]));
+        assertEquals(PasswordStrength.NORMAL, passwordValidator.getPasswordStrength(passwords[2]));
         assertEquals(PasswordStrength.NORMAL, passwordValidator.getPasswordStrength(passwords[3]));
         assertEquals(PasswordStrength.STRONG, passwordValidator.getPasswordStrength(passwords[4]));
     }
