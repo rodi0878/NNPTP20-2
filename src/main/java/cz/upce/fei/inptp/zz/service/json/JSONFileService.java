@@ -5,7 +5,11 @@
  */
 package cz.upce.fei.inptp.zz.service.json;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import cz.upce.fei.inptp.zz.entity.Password;
+import cz.upce.fei.inptp.zz.exception.JsonConversionException;
 
 import java.util.List;
 
@@ -16,28 +20,23 @@ import java.util.List;
  *
  */
 public class JSONFileService implements JSONService {
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    public String toJson(List<Password> passwords)  {
-        // TODO: support all parameters!!!
-        // TODO: support for categories - save them at once/save absolute path as array and later reconstruct?
-        String output = "[";
-        for (Password password : passwords) {
-            if (!output.isEmpty() && !output.equals("["))
-                output += ",";
-            output += "{";
-            output += "id:" + password.getId() + ",";
-            output += "password:\"" + password.getPassword()+"\"";
-            
-            output += "}";
+    public String toJson(List<Password> passwords) throws JsonConversionException {
+        try {
+            return objectMapper.writeValueAsString(passwords);
+        } catch (JsonProcessingException e) {
+            throw new JsonConversionException("Error during mapping Passwords to JSON.", e);
         }
-        output += "]";
-        
-        return output;
     }
-    
+
     @Override
-    public List<Password> fromJson(String json) {
-        throw new RuntimeException("NYI");
+    public List<Password> fromJson(String json) throws JsonConversionException {
+        try {
+            return objectMapper.readValue(json, new TypeReference<List<Password>>() { });
+        } catch (JsonProcessingException e) {
+            throw new JsonConversionException("Error during converting JSON to Password entity.", e);
+        }
     }
 }

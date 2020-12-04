@@ -6,6 +6,7 @@
 package cz.upce.fei.inptp.zz.entity;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 /**
  *
@@ -58,5 +59,24 @@ public class Password {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        final Password other = (Password) obj;
+        return id == other.id
+                && Objects.equals(password, other.password)
+                && Objects.equals(category, other.category);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, password, category);
     }
 }

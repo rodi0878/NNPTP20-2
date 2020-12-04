@@ -17,6 +17,7 @@ import static org.junit.Assert.*;
  * @author Roman
  */
 public class PasswordTest {
+    private Password password;
     
     public PasswordTest() {
     }
@@ -31,6 +32,7 @@ public class PasswordTest {
     
     @Before
     public void setUp() {
+        password = new Password(1, "abcd%123");
     }
     
     @After
@@ -38,11 +40,18 @@ public class PasswordTest {
     }
 
     @Test
-    public void testSomeMethod() {
-        // TODO review the generated test code and remove the default call to fail.
-        Password ppwd = new Password(0, "pass");
-        
-        assertTrue(ppwd.getPassword().equals("pass"));
+    public void testEquals() {
+        Password other = new Password(1, "abcd%123");
+        assertEquals(password, other);
+
+        other.setCategory(new Category());
+        assertNotEquals(password, other);
+
+        other = new Password(2, "abcd%123");
+        assertNotEquals(password, other);
+
+        other = new Password(1, "abcd%1234");
+        assertNotEquals(password, other);
     }
     
 }

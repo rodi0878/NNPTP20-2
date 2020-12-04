@@ -1,6 +1,7 @@
 package cz.upce.fei.inptp.zz.service.json;
 
 import cz.upce.fei.inptp.zz.entity.Password;
+import cz.upce.fei.inptp.zz.exception.JsonConversionException;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ public interface JSONService {
      * @return JSON formatted passwords.
      *
      * */
-    String toJson(List<Password> passwords);
+    String toJson(List<Password> passwords) throws  JsonConversionException;
 
     /**
      * Convert passwords from JSON format.
@@ -27,5 +28,5 @@ public interface JSONService {
      * @return passwords from JSON.
      *
      * */
-    List<Password> fromJson(String json);
+    List<Password> fromJson(String json) throws JsonConversionException;
 }

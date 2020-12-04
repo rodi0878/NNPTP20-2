@@ -16,13 +16,13 @@ import java.util.Objects;
  */
 public class PasswordDatabase {
     private File file;
-    private String passwd;
+    private String password;
     
     private List<Password> passwords = new ArrayList<>();
 
-    public PasswordDatabase(File file, String passwd, List<Password> passwords) {
+    public PasswordDatabase(File file, String password, List<Password> passwords) {
         this.file = file;
-        this.passwd = passwd;
+        this.password = password;
         this.passwords = passwords;
     }
 
@@ -45,8 +45,8 @@ public class PasswordDatabase {
         return file;
     }
 
-    public String getPasswd() {
-        return passwd;
+    public String getPassword() {
+        return password;
     }
 
     public List<Password> getPasswords() {
