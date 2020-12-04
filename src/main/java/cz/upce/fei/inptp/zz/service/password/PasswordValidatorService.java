@@ -6,6 +6,7 @@
 package cz.upce.fei.inptp.zz.service.password;
 
 import cz.upce.fei.inptp.zz.entity.Password;
+import cz.upce.fei.inptp.zz.service.password.PasswordValidatorServiceModule.PasswordStrength;
 
 /**
  *
@@ -13,10 +14,4 @@ import cz.upce.fei.inptp.zz.entity.Password;
  */
 interface PasswordValidatorService {
     PasswordStrength getPasswordStrength(Password password);
-}
-
-enum PasswordStrength {
-    STRONG,
-    NORMAL,
-    WEAK
 }

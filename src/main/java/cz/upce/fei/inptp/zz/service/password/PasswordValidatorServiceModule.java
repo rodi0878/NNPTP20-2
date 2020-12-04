@@ -73,4 +73,10 @@ public class PasswordValidatorServiceModule implements PasswordValidatorService 
         
         return score;
     }
+    
+    public enum PasswordStrength {
+        STRONG,
+        NORMAL,
+        WEAK
+    }
 }
