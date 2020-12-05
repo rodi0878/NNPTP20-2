@@ -6,38 +6,29 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Service for generate password
+ * Service for secure password generation
  */
 public class PasswordSecureGeneratorService implements PasswordGeneratorService {
 
-    private static SecureRandom random = new SecureRandom();
-    private List<Character> characterList = new ArrayList<>();
+    private static final SecureRandom random = new SecureRandom();
+    private static final List<Character> characterList = new ArrayList<>();
 
+    /**
+     * Initialization of PasswordSecureGeneratorService
+     * Generates printable character sequence with random trim and random rotation
+     */
     public PasswordSecureGeneratorService() {
-        inicializationRandomPasswordGenerator();
+        generateSequenceOfCharacters(33+random.nextInt(5), 127-random.nextInt(5));
+        Collections.rotate(characterList, random.nextInt());
     }
 
     @Override
     public String getNewRandomPassword(int passwordLength) {
         StringBuilder password = new StringBuilder();
-
         for (int length = 0; length < passwordLength; length++) {
             password.append(getRandomCharacter());
         }
-
         return password.toString();
-    }
-
-    /**
-     * Performs initialization of a random password generator
-     */
-    private void inicializationRandomPasswordGenerator() {
-
-        generateSequenceOfCharacters(33, 53);
-        generateSequenceOfCharacters(54, 85);
-        generateSequenceOfCharacters(86, 127);
-
-        Collections.rotate(characterList, random.nextInt());
     }
 
     /**
@@ -57,6 +48,6 @@ public class PasswordSecureGeneratorService implements PasswordGeneratorService 
      * @return One random character
      */
     private char getRandomCharacter() {
-        return this.characterList.get(random.nextInt(this.characterList.size()));
+        return characterList.get(random.nextInt(characterList.size()));
     }
 }
