@@ -23,7 +23,7 @@ import java.util.List;
  * 
  * 
  */
-public class main {
+public class Main {
     private static final String ADD_COMMAND = "add";
     private static final String EDIT_COMMAND = "edit";
     private static final String DELETE_COMMAND = "delete";
