@@ -16,17 +16,13 @@ public class Category implements ICategory {
     private List<ICategory> children;
 
 
-    public Category(String name, ICategory parent, List<ICategory> children) {
+    private Category(String name, ICategory parent, List<ICategory> children) {
         this.name = name;
         this.parent = parent;
         this.children = children;
     }
 
-    public Category(String name, ICategory parent) {
-        this.name = name;
-        this.parent = parent;
-        children = new ArrayList<>();
-    }
+
 
     @Override
     public String getName() {
@@ -81,20 +77,20 @@ public class Category implements ICategory {
     }
     public static class CategoryBuilder {
         private String name;
-        private Category parent;
-        private List<Category> children;
+        private ICategory parent;
+        private List<ICategory> children = new ArrayList<>();
 
         public CategoryBuilder setName(String name) {
             this.name = name;
             return this;
         }
 
-        public CategoryBuilder setParent(Category parent) {
+        public CategoryBuilder setParent(ICategory parent) {
             this.parent = parent;
             return this;
         }
 
-        public CategoryBuilder setChildren(List<Category> children) {
+        public CategoryBuilder setChildren(List<ICategory> children) {
             this.children = children;
             return this;
         }
