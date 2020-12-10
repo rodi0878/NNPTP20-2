@@ -46,6 +46,7 @@ public class Main {
         commandLineParser.parse(args);
 
         PasswordDatabaseService databaseService = InstanceInjector.injector().getInstance(PasswordDatabaseService.class);
+        PasswordDatabase passwordDatabase;
         switch(commandLineParser.getParsedCommand()){
             case ADD_COMMAND:
                 Password password = new Password.PasswordBuilder()
@@ -55,7 +56,7 @@ public class Main {
 
                 List<Password> pwds = Arrays.asList(password);
 
-                PasswordDatabase passwordDatabase = new PasswordDatabase.PasswordDatabaseBuilder()
+                passwordDatabase = new PasswordDatabase.PasswordDatabaseBuilder()
                         .setFile(new File("test.txt"))
                         .setPassword("password")
                         .setPasswords(pwds)
@@ -73,7 +74,7 @@ public class Main {
                 break;
             case EDIT_COMMAND:
                 try {
-                    PasswordDatabase passwordDatabase = databaseService.openPasswordDatabase(new File("test.txt"), "password");
+                    passwordDatabase = databaseService.openPasswordDatabase(new File("test.txt"), "password");
                     Password passwordToEdit = passwordDatabase.getPasswordById(editCommand.getId());
                     passwordDatabase.editPassword(passwordToEdit, editCommand.getNewValue().getPassword());
                     databaseService.savePasswordDatabase(passwordDatabase);
@@ -83,7 +84,7 @@ public class Main {
                 break;
             case DELETE_COMMAND:
                 try {
-                    PasswordDatabase passwordDatabase = databaseService.openPasswordDatabase(new File("test.txt"), "password");
+                    passwordDatabase = databaseService.openPasswordDatabase(new File("test.txt"), "password");
                     Password passwordToDelete = passwordDatabase.getPasswordById(editCommand.getId());
                     passwordDatabase.getPasswords().remove(passwordToDelete);
                     databaseService.savePasswordDatabase(passwordDatabase);
