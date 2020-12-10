@@ -19,7 +19,11 @@ public class PasswordDatabaseTest {
 
     @Before
     public void setUp() {
-        database = new PasswordDatabase(null, "password0", new ArrayList<>());
+        database = new PasswordDatabase.PasswordDatabaseBuilder()
+                .setFile(null)
+                .setPassword("password0")
+                .setPasswords(new ArrayList<>())
+                .createPasswordDatabase();
     }
 
     @Test
@@ -52,7 +56,11 @@ public class PasswordDatabaseTest {
         parameters.put(StandardizedParameters.WEBSITE, new TextParameter(website));
         parameters.put(StandardizedParameters.DESCRIPTION, new TextParameter(description));
         parameters.put(StandardizedParameters.EXPIRATION_DATETIME, new Parameter.DateTimeParameter(LocalDateTime.now().plusYears(1L)));
-        return new Password(id, password, parameters);
+        return new Password.PasswordBuilder()
+                .setId(id)
+                .setPassword(password)
+                .setParameters(parameters)
+                .createPassword();
     }
 
     @Test

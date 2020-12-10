@@ -48,8 +48,20 @@ public class Main {
         PasswordDatabaseService databaseService = InstanceInjector.injector().getInstance(PasswordDatabaseService.class);
         switch(commandLineParser.getParsedCommand()){
             case ADD_COMMAND:
-                List<Password> pwds = Arrays.asList(new Password(0, addCommand.getPassword().getPassword()));
-                databaseService.savePasswordDatabase(new PasswordDatabase(new File("test.txt"), "password", pwds));
+                Password password = new Password.PasswordBuilder()
+                        .setId(0)
+                        .setPassword(addCommand.getPassword().getPassword())
+                        .createPassword();
+
+                List<Password> pwds = Arrays.asList(password);
+
+                PasswordDatabase passwordDatabase = new PasswordDatabase.PasswordDatabaseBuilder()
+                        .setFile(new File("test.txt"))
+                        .setPassword("password")
+                        .setPasswords(pwds)
+                        .createPasswordDatabase();
+
+                databaseService.savePasswordDatabase(passwordDatabase);
                 break;
             case SELECT_COMMAND:
                 try {

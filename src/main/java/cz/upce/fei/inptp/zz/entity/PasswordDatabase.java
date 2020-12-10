@@ -21,7 +21,7 @@ public class PasswordDatabase {
     
     private List<Password> passwords = new ArrayList<>();
 
-    public PasswordDatabase(File file, String password, List<Password> passwords) {
+    private PasswordDatabase(File file, String password, List<Password> passwords) {
         this.file = file;
         this.password = password;
         this.passwords = passwords;
@@ -66,6 +66,30 @@ public class PasswordDatabase {
     public void editPassword(Password passwordToEdit, String newPassword) {
         if (passwordToEdit != null && newPassword != null){
             passwordToEdit.setPassword(newPassword);
+        }          
+
+    public static class PasswordDatabaseBuilder {
+        private File file;
+        private String password;
+        private List<Password> passwords;
+
+        public PasswordDatabaseBuilder setFile(File file) {
+            this.file = file;
+            return this;
+        }
+
+        public PasswordDatabaseBuilder setPassword(String password) {
+            this.password = password;
+            return this;
+        }
+
+        public PasswordDatabaseBuilder setPasswords(List<Password> passwords) {
+            this.passwords = passwords;
+            return this;
+        }
+
+        public PasswordDatabase createPasswordDatabase() {
+            return new PasswordDatabase(file, password, passwords);
         }
     }
 }
