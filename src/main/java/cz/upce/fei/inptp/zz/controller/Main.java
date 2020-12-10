@@ -12,6 +12,7 @@ import cz.upce.fei.inptp.zz.service.password.PasswordDatabaseService;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.security.InvalidParameterException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -67,6 +68,26 @@ public class Main {
                     String read = databaseService.openPasswordDatabase(new File("test.txt"), "password").getPassword();
                     System.out.println(read);
                 } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case EDIT_COMMAND:
+                try {
+                    PasswordDatabase passwordDatabase = databaseService.openPasswordDatabase(new File("test.txt"), "password");
+                    Password passwordToEdit = passwordDatabase.getPasswordById(editCommand.getId());
+                    passwordDatabase.editPassword(passwordToEdit, editCommand.getNewValue().getPassword());
+                    databaseService.savePasswordDatabase(passwordDatabase);
+                } catch (FileNotFoundException | InvalidParameterException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case DELETE_COMMAND:
+                try {
+                    PasswordDatabase passwordDatabase = databaseService.openPasswordDatabase(new File("test.txt"), "password");
+                    Password passwordToDelete = passwordDatabase.getPasswordById(editCommand.getId());
+                    passwordDatabase.getPasswords().remove(passwordToDelete);
+                    databaseService.savePasswordDatabase(passwordDatabase);
+                } catch (FileNotFoundException | InvalidParameterException e) {
                     e.printStackTrace();
                 }
                 break;

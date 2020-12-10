@@ -37,6 +37,8 @@ public class Password {
         return password;
     }
 
+    public void setPassword(String newPassword) { this.password = newPassword; }
+
     public HashMap<String, Parameter> getParameters() {
         return parameters;
     }

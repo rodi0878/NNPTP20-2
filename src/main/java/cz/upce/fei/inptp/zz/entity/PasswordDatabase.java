@@ -6,6 +6,7 @@
 package cz.upce.fei.inptp.zz.entity;
 
 import java.io.File;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -53,6 +54,19 @@ public class PasswordDatabase {
         return passwords;
     }
 
+    public Password getPasswordById(int passwordId) throws InvalidParameterException {
+        for (Password password : this.getPasswords()){
+            if (password.getId() == passwordId){
+                return password;
+            }
+        }
+        throw new InvalidParameterException("Password ID not found");
+    }
+
+    public void editPassword(Password passwordToEdit, String newPassword) {
+        if (passwordToEdit != null && newPassword != null){
+            passwordToEdit.setPassword(newPassword);
+        }          
 
     public static class PasswordDatabaseBuilder {
         private File file;
