@@ -10,14 +10,32 @@ public class CategoryTest extends TestCase {
 
     @Override
     public void setUp(){
-        Category testRootCategory = new Category("test", NullCategory.getInstance());
-        testCategory = new Category("work", testRootCategory);
+        Category testRootCategory = new Category.CategoryBuilder()
+                .setName("test")
+                .setParent(NullCategory.getInstance())
+                .createCategory();
+        testCategory = new Category.CategoryBuilder()
+                .setName("work")
+                .setParent(testRootCategory)
+                .createCategory();
         testRootCategory.getChildren().add(testCategory);
-        Category controlRootCategory = new Category("test", NullCategory.getInstance());
-        controlCategory = new Category("work", controlRootCategory);
+        Category controlRootCategory = new Category.CategoryBuilder()
+                .setName("test")
+                .setParent(NullCategory.getInstance())
+                .createCategory();
+        controlCategory = new Category.CategoryBuilder()
+                .setName("work")
+                .setParent(controlRootCategory)
+                .createCategory();
         controlCategory.getChildren().add(controlCategory);
-        Category differentRootCategory = new Category("different", NullCategory.getInstance());
-        differentCategory = new Category("work", differentRootCategory);
+        Category differentRootCategory = new Category.CategoryBuilder()
+                .setName("different")
+                .setParent(NullCategory.getInstance())
+                .createCategory();
+        differentCategory = new Category.CategoryBuilder()
+                .setName("work")
+                .setParent(differentRootCategory)
+                .createCategory();
         differentCategory.getChildren().add(differentCategory);
     }
 
