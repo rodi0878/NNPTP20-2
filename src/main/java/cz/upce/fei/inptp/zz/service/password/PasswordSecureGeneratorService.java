@@ -11,7 +11,7 @@ import java.util.List;
 public class PasswordSecureGeneratorService implements PasswordGeneratorService {
 
     private static final SecureRandom random = new SecureRandom();
-    private static final List<Character> characterList = new ArrayList<>();
+    private final List<Character> characterList = new ArrayList<>();
 
     /**
      * Initialization of PasswordSecureGeneratorService
