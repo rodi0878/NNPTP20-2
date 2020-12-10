@@ -54,11 +54,11 @@ public class Main {
         switch(commandLineParser.getParsedCommand()){
             case ADD_COMMAND:
                 List<Password> pwds = Arrays.asList(new Password(0, addCommand.getPassword().getPassword()));
-                databaseService.savePasswordDatabase(new PasswordDatabase(new File("test.txt"), password, pwds));
+                databaseService.savePasswordDatabase(new PasswordDatabase(addCommand.getPasswordFile(), password, pwds));
                 break;
             case SELECT_COMMAND:
                 try {
-                    String read = databaseService.openPasswordDatabase(new File("test.txt"), password).getPassword();
+                    String read = databaseService.openPasswordDatabase(selectCommand.getPasswordFile(), password).getPassword();
                     System.out.println(read);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
