@@ -17,17 +17,13 @@ public class Password {
     private int id;
     private String password;
     private HashMap<String, Parameter> parameters;
-    private Category category;
+    private ICategory category;
 
-    public Password() {
+    private Password(){
+
     }
 
-    public Password(int id, String password) {
-        this.id = id;
-        this.password = password;
-    }
-
-    public Password(int id, String password, HashMap<String, Parameter> parameters) {
+    private Password(int id, String password, HashMap<String, Parameter> parameters) {
         this.id = id;
         this.password = password;
         this.parameters = parameters;
@@ -41,6 +37,8 @@ public class Password {
         return password;
     }
 
+    public void setPassword(String newPassword) { this.password = newPassword; }
+
     public HashMap<String, Parameter> getParameters() {
         return parameters;
     }
@@ -53,11 +51,11 @@ public class Password {
         return parameters.get(parameterName);
     }
 
-    public Category getCategory() {
+    public ICategory getCategory() {
         return category;
     }
 
-    public void setCategory(Category category) {
+    public void setCategory(ICategory category) {
         this.category = category;
     }
 
@@ -78,5 +76,31 @@ public class Password {
     @Override
     public int hashCode() {
         return Objects.hash(id, password, category);
+    }
+
+
+    public static class PasswordBuilder {
+        private int id;
+        private String password;
+        private HashMap<String, Parameter> parameters;
+
+        public PasswordBuilder setId(int id) {
+            this.id = id;
+            return this;
+        }
+
+        public PasswordBuilder setPassword(String password) {
+            this.password = password;
+            return this;
+        }
+
+        public PasswordBuilder setParameters(HashMap<String, Parameter> parameters) {
+            this.parameters = parameters;
+            return this;
+        }
+
+        public Password createPassword() {
+            return new Password(id, password, parameters);
+        }
     }
 }
