@@ -67,6 +67,7 @@ public class PasswordDatabase {
         if (passwordToEdit != null && newPassword != null){
             passwordToEdit.setPassword(newPassword);
         }          
+    }
 
     public static class PasswordDatabaseBuilder {
         private File file;

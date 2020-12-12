@@ -69,7 +69,10 @@ public class PasswordTest {
     @Test
     public void setPasswordTest(){
         String expectedPassword = "Password";
-        Password  password = new Password(0, "paswd");
+        Password password = new Password.PasswordBuilder()
+                        .setId(0)
+                        .setPassword("paswd")
+                        .createPassword();
         password.setPassword("Password");
         assertEquals(password.getPassword(), expectedPassword);
     }
