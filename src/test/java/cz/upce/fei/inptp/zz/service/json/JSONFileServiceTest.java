@@ -23,6 +23,7 @@ public class JSONFileServiceTest {
                 "{\"id\":1,\"password\":\"ASDSAFafasdasdasdas\",\"parameters\":null,\"category\":null}," +
                 "{\"id\":2,\"password\":\"aaa-aaaa-\",\"parameters\":null,\"category\":null}" +
                 "]";
+<<<<<<< HEAD
         jsonFormatWithParameters = "[" +
                 "{\"id\":0,\"password\":\"sdfghjkl\"," +
                     "\"parameters\":null," +
@@ -44,6 +45,22 @@ public class JSONFileServiceTest {
                     "[\"title\",{\"value\":\"tiktok\"}]]," +
                     "\"category\":null}" +
                 "]";
+=======
+
+        examplePasswordsList = new ArrayList<>();
+        examplePasswordsList.add(new Password.PasswordBuilder()
+                .setId(0)
+                .setPassword("sdfghjkl")
+                .createPassword());
+        examplePasswordsList.add(new Password.PasswordBuilder()
+                .setId(1)
+                .setPassword("ASDSAFafasdasdasdas")
+                .createPassword());
+        examplePasswordsList.add(new Password.PasswordBuilder()
+                .setId(2)
+                .setPassword("aaa-aaaa-")
+                .createPassword());
+>>>>>>> ec31f162cf05306e869fef824e4aadb490dab6a6
     }
 
     @Test
