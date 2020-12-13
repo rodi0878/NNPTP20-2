@@ -16,6 +16,9 @@ public class JSONFileServiceTest {
     private JSONService jsonService = new JSONFileService();
     private String jsonFormatWithoutParameters;
     private String jsonFormatWithParameters;
+    private Password.PasswordBuilder builder = new Password.PasswordBuilder();
+    private List<Password> examplePasswordsList;
+
     @Before
     public void setUp() {
         jsonFormatWithoutParameters = "[" +
@@ -23,44 +26,41 @@ public class JSONFileServiceTest {
                 "{\"id\":1,\"password\":\"ASDSAFafasdasdasdas\",\"parameters\":null,\"category\":null}," +
                 "{\"id\":2,\"password\":\"aaa-aaaa-\",\"parameters\":null,\"category\":null}" +
                 "]";
-<<<<<<< HEAD
         jsonFormatWithParameters = "[" +
-                "{\"id\":0,\"password\":\"sdfghjkl\"," +
-                    "\"parameters\":null," +
-                    "\"category\":null}," +
-                "{\"id\":1,\"password\":\"ASDSAFafasdasdasdas\"," +
-                    "\"parameters\":null," +
-                    "\"category\":null}," +
-                "{\"id\":2,\"password\":\"aaa-aaaa-\"," +
-                    "\"parameters\":null," +
-                    "\"category\":null}," +
-                "{\"id\":3,\"password\":\"password1\",\"parameters\":[" +
-                    "[\"website\",{\"value\":\"gmail.com\"}]," +
-                    "[\"description\",{\"value\":\"Password for my email\"}]," +
-                    "[\"title\",{\"value\":\"email\"}]]," +
-                    "\"category\":null}," +
-                "{\"id\":4,\"password\":\"password4\",\"parameters\":[" +
-                    "[\"website\",{\"value\":\"tiktok.com\"}]," +
-                    "[\"description\",{\"value\":\"Password for social media\"}]," +
-                    "[\"title\",{\"value\":\"tiktok\"}]]," +
-                    "\"category\":null}" +
+                "{\"id\":0,\"password\":\"sdfghjkl\",\"parameters\":null,\"category\":null}," +
+                "{\"id\":1,\"password\":\"ASDSAFafasdasdasdas\",\"parameters\":null,\"category\":null}," +
+                "{\"id\":2,\"password\":\"aaa-aaaa-\",\"parameters\":null,\"category\":null}," +
+                "{\"id\":3,\"password\":\"password1\",\"parameters\":" +
+                "[" +
+                "{\"website\":{\"value\":\"gmail.com\"}}," +
+                "{\"description\":{\"value\":\"Password for my email\"}}," +
+                "{\"expiration-datetime\":null}," +
+                "{\"title\":{\"value\":\"email\"}}" +
+                "]," +
+                "\"category\":null}," +
+                "{\"id\":4,\"password\":\"password4\",\"parameters\":" +
+                "[" +
+                "{\"website\":{\"value\":\"tiktok.com\"}}," +
+                "{\"description\":{\"value\":\"Password for social media\"}}," +
+                "{\"expiration-datetime\":null}," +
+                "{\"title\":{\"value\":\"tiktok\"}}" +
+                "]," +
+                "\"category\":null}" +
                 "]";
-=======
 
         examplePasswordsList = new ArrayList<>();
-        examplePasswordsList.add(new Password.PasswordBuilder()
+        examplePasswordsList.add(builder
                 .setId(0)
                 .setPassword("sdfghjkl")
                 .createPassword());
-        examplePasswordsList.add(new Password.PasswordBuilder()
+        examplePasswordsList.add(builder
                 .setId(1)
                 .setPassword("ASDSAFafasdasdasdas")
                 .createPassword());
-        examplePasswordsList.add(new Password.PasswordBuilder()
+        examplePasswordsList.add(builder
                 .setId(2)
                 .setPassword("aaa-aaaa-")
                 .createPassword());
->>>>>>> ec31f162cf05306e869fef824e4aadb490dab6a6
     }
 
     @Test
@@ -87,25 +87,56 @@ public class JSONFileServiceTest {
         Assert.assertEquals(passwordsWithParameters(), convertedPasswords);
     }
 
-    private List<Password> passwordsWithoutParameters(){
-        List<Password>   passwords = new ArrayList<>();
-        passwords.add(new Password(0, "sdfghjkl"));
-        passwords.add(new Password(1, "ASDSAFafasdasdasdas"));
-        passwords.add(new Password(2, "aaa-aaaa-"));
+    private List<Password> passwordsWithoutParameters() {
+        List<Password> passwords = new ArrayList<>();
+        passwords.add(builder
+                .setId(0)
+                .setPassword("sdfghjkl")
+                .setParameters(null)
+                .createPassword());
+        passwords.add(builder
+                .setId(1)
+                .setPassword("ASDSAFafasdasdasdas")
+                .setParameters(null)
+                .createPassword());
+        passwords.add(builder
+                .setId(2)
+                .setPassword("aaa-aaaa-")
+                .setParameters(null)
+                .createPassword());
         return passwords;
 
     }
 
 
-    private List<Password> passwordsWithParameters(){
+    private List<Password> passwordsWithParameters() {
         List<Password> passwords = new ArrayList<>();
-        passwords.add(new Password(0, "sdfghjkl"));
-        passwords.add(new Password(1, "ASDSAFafasdasdasdas"));
-        passwords.add(new Password(2, "aaa-aaaa-"));
+        passwords.add(builder
+                .setId(0)
+                .setPassword("sdfghjkl")
+                .setParameters(null)
+                .createPassword());
+        passwords.add(builder
+                .setId(1)
+                .setPassword("ASDSAFafasdasdasdas")
+                .setParameters(null)
+                .createPassword());
+        passwords.add(builder
+                .setId(2)
+                .setPassword("aaa-aaaa-")
+                .setParameters(null)
+                .createPassword());
         Password emailPass = PasswordDatabaseTest.preparePassword(3, "password1", "email", "gmail.com", "Password for my email");
         Password tikTokPass = PasswordDatabaseTest.preparePassword(4, "password4", "tiktok", "tiktok.com", "Password for social media");
         passwords.add(emailPass);
         passwords.add(tikTokPass);
+        try {
+            String json = jsonService.toJson(passwords);
+            System.out.println(json);
+            jsonService.fromJson(json);
+        } catch (JsonConversionException e) {
+            e.printStackTrace();
+        }
         return passwords;
     }
 }

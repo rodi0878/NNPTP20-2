@@ -10,15 +10,24 @@ import java.util.Map;
 
 public class JSONFileCustomSerializer extends JsonSerializer<Map<String, Parameter>> {
     @Override
-    public void serialize(final Map<String, Parameter> attrMap, final JsonGenerator generator, final SerializerProvider provider)
-            throws IOException {
-        generator.writeStartArray();
-        for (Map.Entry<String, Parameter> entry : attrMap.entrySet()){
+    public void serialize(final Map<String, Parameter> attrMap, final JsonGenerator generator, final SerializerProvider provider) {
+        try {
             generator.writeStartArray();
-            generator.writeString(entry.getKey());
-            generator.writeObject(entry.getValue());
+            attrMap.entrySet().stream().forEach(e -> {
+                        try {
+                            generator.writeStartObject();
+                            generator.writeFieldName(e.getKey());
+                            generator.writeObject(e.getValue());
+                            generator.writeEndObject();
+                        } catch (IOException ioException) {
+                            ioException.printStackTrace();
+                        }
+                    }
+            );
             generator.writeEndArray();
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
         }
-        generator.writeEndArray();
+
     }
 }

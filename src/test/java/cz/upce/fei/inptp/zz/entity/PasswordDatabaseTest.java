@@ -55,10 +55,7 @@ public class PasswordDatabaseTest {
         parameters.put(StandardizedParameters.TITLE, new TextParameter(tittle));
         parameters.put(StandardizedParameters.WEBSITE, new TextParameter(website));
         parameters.put(StandardizedParameters.DESCRIPTION, new TextParameter(description));
-<<<<<<< HEAD
-        return new Password(id, password, parameters);
-=======
-        parameters.put(StandardizedParameters.EXPIRATION_DATETIME, new Parameter.DateTimeParameter(LocalDateTime.now().plusYears(1L)));
+        parameters.put(StandardizedParameters.EXPIRATION_DATETIME, null);
         return new Password.PasswordBuilder()
                 .setId(id)
                 .setPassword(password)
@@ -90,6 +87,5 @@ public class PasswordDatabaseTest {
                         .createPassword();
         password.setPassword("Password");
         assertEquals(password.getPassword(), expectedPassword);
->>>>>>> ec31f162cf05306e869fef824e4aadb490dab6a6
     }
 }

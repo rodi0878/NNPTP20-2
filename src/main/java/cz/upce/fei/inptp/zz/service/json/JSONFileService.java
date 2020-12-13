@@ -19,15 +19,13 @@ import java.util.List;
  * Service for creating JSON files.
  *
  * @author Roman
- *
  */
 public class JSONFileService implements JSONService {
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private static final ObjectMapper objectMapper = new ObjectMapper()
+            .registerModule(new JavaTimeModule());
 
     @Override
     public String toJson(List<Password> passwords) throws JsonConversionException {
-
-        objectMapper.registerModule(new JavaTimeModule());
         StringBuilder result = new StringBuilder();
         result.append("[");
         try {
@@ -47,7 +45,8 @@ public class JSONFileService implements JSONService {
     public List<Password> fromJson(String json) throws JsonConversionException {
         List<Password> passwords = null;
         try {
-            passwords = objectMapper.readerFor(new TypeReference<List<Password>>() {}).readValue(json);
+            passwords = objectMapper.readerFor(new TypeReference<List<Password>>() {
+            }).readValue(json);
         } catch (JsonProcessingException e) {
             throw new JsonConversionException("Error during mapping Passwords to JSON.", e);
         }
