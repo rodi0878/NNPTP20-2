@@ -49,16 +49,28 @@ public class Main {
 
         PasswordDatabaseService databaseService = InstanceInjector.injector().getInstance(PasswordDatabaseService.class);
         PasswordGeneratorService passwordGenerator = InstanceInjector.injector().getInstance(PasswordSecureGeneratorService.class);
-        String password = passwordGenerator.getNewRandomPassword(20);
+        String generatedPassword = passwordGenerator.getNewRandomPassword(20);
       
         switch(commandLineParser.getParsedCommand()){
             case ADD_COMMAND:
-                List<Password> pwds = Arrays.asList(new Password(0, addCommand.getPassword().getPassword()));
-                databaseService.savePasswordDatabase(new PasswordDatabase(addCommand.getPasswordFile(), password, pwds));
+                Password password = new Password.PasswordBuilder()
+                        .setId(0)
+                        .setPassword(addCommand.getPassword().getPassword())
+                        .createPassword();
+
+                List<Password> pwds = Arrays.asList(password);
+
+                PasswordDatabase passwordDatabase = new PasswordDatabase.PasswordDatabaseBuilder()
+                        .setFile(addCommand.getPasswordFile())
+                        .setPassword("password")
+                        .setPasswords(pwds)
+                        .createPasswordDatabase();
+
+                databaseService.savePasswordDatabase(passwordDatabase);
                 break;
             case SELECT_COMMAND:
                 try {
-                    String read = databaseService.openPasswordDatabase(selectCommand.getPasswordFile(), password).getPassword();
+                    String read = databaseService.openPasswordDatabase(selectCommand.getPasswordFile(), generatedPassword).getPassword();
                     System.out.println(read);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();

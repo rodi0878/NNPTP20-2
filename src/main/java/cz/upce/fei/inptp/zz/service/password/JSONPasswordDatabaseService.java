@@ -40,7 +40,11 @@ public class JSONPasswordDatabaseService implements PasswordDatabaseService {
         } catch (JsonConversionException e) {
             logger.log(Level.SEVERE, "Error during converting JSON to Password list!", e);
         }
-        return new PasswordDatabase(path, password, passwordFromJSON);
+        return new PasswordDatabase.PasswordDatabaseBuilder()
+                .setFile(path)
+                .setPassword(password)
+                .setPasswords(passwordFromJSON)
+                .createPasswordDatabase();
     }
 
     @Override

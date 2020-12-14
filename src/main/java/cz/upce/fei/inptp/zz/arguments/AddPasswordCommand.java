@@ -13,7 +13,7 @@ import cz.upce.fei.inptp.zz.converter.TextParameterConverter;
  * */
 @Parameters(commandDescription = "Add password to database.")
 public class AddPasswordCommand extends CommandArguments {
-    @Parameter(required = true, converter = PasswordParameterConverter.class,
+    @Parameter(names = {"--add-password", "-ap", "-P"}, required = true, converter = PasswordParameterConverter.class,
             description = "Add password to to database.")
     private cz.upce.fei.inptp.zz.entity.Parameter.PasswordParameter password;
 

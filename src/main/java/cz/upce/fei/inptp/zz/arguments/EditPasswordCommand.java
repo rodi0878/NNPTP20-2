@@ -13,7 +13,7 @@ import java.util.List;
  * */
 @Parameters(commandDescription = "Edit password in database.")
 public class EditPasswordCommand extends CommandArguments {
-    @Parameter(required = true, converter = PasswordParameterConverter.class,
+    @Parameter(names = {"--edit-password", "-ep", "-P"}, required = true, converter = PasswordParameterConverter.class,
             description = "Edit password value in database.")
     private cz.upce.fei.inptp.zz.entity.Parameter.PasswordParameter newValue;
 
