@@ -1,6 +1,5 @@
 package cz.upce.fei.inptp.zz.service.json;
 
-import cz.upce.fei.inptp.zz.entity.Category;
 import cz.upce.fei.inptp.zz.entity.Password;
 import cz.upce.fei.inptp.zz.entity.PasswordDatabaseTest;
 import cz.upce.fei.inptp.zz.exception.JsonConversionException;
