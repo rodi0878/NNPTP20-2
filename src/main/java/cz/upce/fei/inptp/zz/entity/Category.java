@@ -15,20 +15,14 @@ public class Category implements ICategory {
     private ICategory parent;
     private List<ICategory> children;
 
-    public Category() {
-    }
 
-    public Category(String name, ICategory parent, List<ICategory> children) {
+    private Category(String name, ICategory parent, List<ICategory> children) {
         this.name = name;
         this.parent = parent;
         this.children = children;
     }
 
-    public Category(String name, ICategory parent) {
-        this.name = name;
-        this.parent = parent;
-        children = new ArrayList<>();
-    }
+
 
     @Override
     public String getName() {
@@ -80,5 +74,29 @@ public class Category implements ICategory {
             return  getParent().compareTo(o.getParent());
         }
         return getName().compareTo(o.getName());
+    }
+    public static class CategoryBuilder {
+        private String name;
+        private ICategory parent;
+        private List<ICategory> children = new ArrayList<>();
+
+        public CategoryBuilder setName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public CategoryBuilder setParent(ICategory parent) {
+            this.parent = parent;
+            return this;
+        }
+
+        public CategoryBuilder setChildren(List<ICategory> children) {
+            this.children = children;
+            return this;
+        }
+
+        public Category createCategory() {
+            return new Category(name, parent, children);
+        }
     }
 }

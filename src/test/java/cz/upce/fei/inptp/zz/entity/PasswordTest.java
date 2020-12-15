@@ -32,7 +32,10 @@ public class PasswordTest {
     
     @Before
     public void setUp() {
-        password = new Password(1, "abcd%123");
+        password = new Password.PasswordBuilder()
+                .setId(1)
+                .setPassword("abcd%123")
+                .createPassword();
     }
     
     @After
@@ -41,17 +44,36 @@ public class PasswordTest {
 
     @Test
     public void testEquals() {
-        Password other = new Password(1, "abcd%123");
+        Password other = new Password.PasswordBuilder()
+                .setId(1)
+                .setPassword("abcd%123")
+                .createPassword();
         assertEquals(password, other);
 
-        other.setCategory(new Category());
+        other.setCategory(new Category.CategoryBuilder().createCategory());
         assertNotEquals(password, other);
 
-        other = new Password(2, "abcd%123");
+        other = new Password.PasswordBuilder()
+                .setId(2)
+                .setPassword("abcd%123")
+                .createPassword();
         assertNotEquals(password, other);
 
-        other = new Password(1, "abcd%1234");
+        other = new Password.PasswordBuilder()
+                .setId(1)
+                .setPassword("abcd%1234")
+                .createPassword();
         assertNotEquals(password, other);
     }
-    
+
+    @Test
+    public void setPasswordTest(){
+        String expectedPassword = "Password";
+        Password password = new Password.PasswordBuilder()
+                        .setId(0)
+                        .setPassword("paswd")
+                        .createPassword();
+        password.setPassword("Password");
+        assertEquals(password.getPassword(), expectedPassword);
+    }
 }
