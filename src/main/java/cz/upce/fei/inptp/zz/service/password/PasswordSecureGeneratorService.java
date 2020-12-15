@@ -47,7 +47,7 @@ public class PasswordSecureGeneratorService implements PasswordGeneratorService 
      * @param max The maximum value to which the sequence is generated.
      */
     private void generateSequenceOfCharacters(int min, int max) {
-        for (int i = min; i < max; i++) {
+        for (int i = min; i <= max; i++) {
             characterList.add((char) i);
         }
     }
