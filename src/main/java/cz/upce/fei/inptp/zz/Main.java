@@ -61,7 +61,7 @@ public class Main {
                 List<Password> pwds = Arrays.asList(password);
 
                 PasswordDatabase passwordDatabase = new PasswordDatabase.PasswordDatabaseBuilder()
-                        .setFile(new File("test.txt"))
+                        .setFile(addCommand.getPasswordFile())
                         .setPassword("password")
                         .setPasswords(pwds)
                         .createPasswordDatabase();
@@ -70,7 +70,7 @@ public class Main {
                 break;
             case SELECT_COMMAND:
                 try {
-                    String read = databaseService.openPasswordDatabase(new File("test.txt"), generatedPassword).getPassword();
+                    String read = databaseService.openPasswordDatabase(selectCommand.getPasswordFile(), generatedPassword).getPassword();
                     System.out.println(read);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
