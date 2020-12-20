@@ -1,7 +1,6 @@
 package cz.upce.fei.inptp.zz;
 
 import com.beust.jcommander.JCommander;
-import com.beust.jcommander.ParameterException;
 import cz.upce.fei.inptp.zz.arguments.AddPasswordCommand;
 import cz.upce.fei.inptp.zz.arguments.DeletePasswordCommand;
 import cz.upce.fei.inptp.zz.arguments.EditPasswordCommand;
@@ -15,6 +14,7 @@ import cz.upce.fei.inptp.zz.service.password.PasswordGeneratorService;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.security.InvalidParameterException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -49,18 +49,51 @@ public class Main {
 
         PasswordDatabaseService databaseService = InstanceInjector.injector().getInstance(PasswordDatabaseService.class);
         PasswordGeneratorService passwordGenerator = InstanceInjector.injector().getInstance(PasswordSecureGeneratorService.class);
-        String password = passwordGenerator.getNewRandomPassword(20);
-      
+        String generatedPassword = passwordGenerator.getNewRandomPassword(20);
+        PasswordDatabase passwordDatabase;
+
         switch(commandLineParser.getParsedCommand()){
             case ADD_COMMAND:
-                List<Password> pwds = Arrays.asList(new Password(0, addCommand.getPassword().getPassword()));
-                databaseService.savePasswordDatabase(new PasswordDatabase(new File("test.txt"), password, pwds));
+                Password password = new Password.PasswordBuilder()
+                        .setId(0)
+                        .setPassword(addCommand.getPassword().getPassword())
+                        .createPassword();
+
+                List<Password> pwds = Arrays.asList(password);
+
+                passwordDatabase = new PasswordDatabase.PasswordDatabaseBuilder()
+                        .setFile(addCommand.getPasswordFile())
+                        .setPassword("password")
+                        .setPasswords(pwds)
+                        .createPasswordDatabase();
+
+                databaseService.savePasswordDatabase(passwordDatabase);
                 break;
             case SELECT_COMMAND:
                 try {
-                    String read = databaseService.openPasswordDatabase(new File("test.txt"), password).getPassword();
+                    String read = databaseService.openPasswordDatabase(selectCommand.getPasswordFile(), generatedPassword).getPassword();
                     System.out.println(read);
                 } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case EDIT_COMMAND:
+                try {
+                    passwordDatabase = databaseService.openPasswordDatabase(new File("test.txt"), generatedPassword);
+                    Password passwordToEdit = passwordDatabase.getPasswordById(editCommand.getId());
+                    passwordDatabase.editPassword(passwordToEdit, editCommand.getNewValue().getPassword());
+                    databaseService.savePasswordDatabase(passwordDatabase);
+                } catch (FileNotFoundException | InvalidParameterException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case DELETE_COMMAND:
+                try {
+                    passwordDatabase = databaseService.openPasswordDatabase(new File("test.txt"), generatedPassword);
+                    Password passwordToDelete = passwordDatabase.getPasswordById(editCommand.getId());
+                    passwordDatabase.getPasswords().remove(passwordToDelete);
+                    databaseService.savePasswordDatabase(passwordDatabase);
+                } catch (FileNotFoundException | InvalidParameterException e) {
                     e.printStackTrace();
                 }
                 break;
