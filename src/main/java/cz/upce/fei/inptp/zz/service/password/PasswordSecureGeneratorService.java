@@ -6,50 +6,29 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Service for generate password
+ * Service for secure password generation
  */
 public class PasswordSecureGeneratorService implements PasswordGeneratorService {
 
-    private static SecureRandom random = new SecureRandom();
-    private List<Character> characterList = new ArrayList<>();
+    private static final SecureRandom random = new SecureRandom();
+    private final List<Character> characterList = new ArrayList<>();
 
+    /**
+     * Initialization of PasswordSecureGeneratorService
+     * Generates printable character sequence with random rotation
+     */
     public PasswordSecureGeneratorService() {
-        inicializationRandomPasswordGenerator();
+        for (int i = 33; i < 127; i++) characterList.add((char) i);
+        Collections.rotate(characterList, random.nextInt());
     }
 
     @Override
     public String getNewRandomPassword(int passwordLength) {
         StringBuilder password = new StringBuilder();
-
         for (int length = 0; length < passwordLength; length++) {
             password.append(getRandomCharacter());
         }
-
         return password.toString();
-    }
-
-    /**
-     * Performs initialization of a random password generator
-     */
-    private void inicializationRandomPasswordGenerator() {
-
-        generateSequenceOfCharacters(33, 53);
-        generateSequenceOfCharacters(54, 85);
-        generateSequenceOfCharacters(86, 127);
-
-        Collections.rotate(characterList, random.nextInt());
-    }
-
-    /**
-     * Generate a sequence of characters from a specified interval
-     *
-     * @param min The minimum value from which generates a sequence.
-     * @param max The maximum value to which the sequence is generated.
-     */
-    private void generateSequenceOfCharacters(int min, int max) {
-        for (int i = min; i < max; i++) {
-            characterList.add((char) i);
-        }
     }
 
     /**
@@ -57,6 +36,6 @@ public class PasswordSecureGeneratorService implements PasswordGeneratorService 
      * @return One random character
      */
     private char getRandomCharacter() {
-        return this.characterList.get(random.nextInt(this.characterList.size()));
+        return characterList.get(random.nextInt(characterList.size()));
     }
 }
