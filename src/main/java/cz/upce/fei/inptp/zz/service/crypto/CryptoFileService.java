@@ -29,8 +29,8 @@ import javax.inject.Inject;
  */
 public class CryptoFileService implements CryptoService {
 
-    private static final String ENCRYPTION_ALGO = "AES/GCM/NoPadding";
-    private static final String BASE_ALGO = "AES";
+    private static final String ENCRYPTION_ALGORITHM = "AES/GCM/NoPadding";
+    private static final String BASE_ALGORITHM = "AES";
 
     private static final int TAG_LENGTH_BIT = 128;
     private static final int IV_LENGTH_BYTE = 12;
@@ -41,7 +41,8 @@ public class CryptoFileService implements CryptoService {
     private static final int KEY_LENGTH = 128;
     private static final String KEY_CREATION_ALGORITHM = "PBKDF2WithHmacSHA256";
 
-    private JSONService jsonService;
+    private final Logger logger = Logger.getLogger(CryptoFileService.class.getName());
+    private final JSONService jsonService;
 
     @Inject
     public CryptoFileService(JSONService jsonService) {
@@ -56,7 +57,7 @@ public class CryptoFileService implements CryptoService {
             dataInputStream.close();
             return decrypt(password, stringFromFile);
         } catch (IOException ex) {
-            Logger.getLogger(CryptoFileService.class.getName()).log(Level.SEVERE, null, ex);
+            logger.log(Level.SEVERE, null, ex);
             return null;
         }
     }
@@ -68,7 +69,7 @@ public class CryptoFileService implements CryptoService {
             dataOutputStream.writeUTF(encrypt(password, textForWrite));
             dataOutputStream.close();
         } catch (IOException ex) {
-            Logger.getLogger(CryptoFileService.class.getName()).log(Level.SEVERE, null, ex);
+            logger.log(Level.SEVERE, null, ex);
         }
     }
 
@@ -79,7 +80,7 @@ public class CryptoFileService implements CryptoService {
             byte[] iv = generateRandomNonce(IV_LENGTH_BYTE);
 
             SecretKey aesKeyFromPassword = getAESKeyFromPassword(password.toCharArray(), salt);
-            Cipher cipher = Cipher.getInstance(ENCRYPTION_ALGO);
+            Cipher cipher = Cipher.getInstance(ENCRYPTION_ALGORITHM);
             cipher.init(Cipher.ENCRYPT_MODE, aesKeyFromPassword, new GCMParameterSpec(TAG_LENGTH_BIT, iv));
 
             byte[] cipherText = cipher.doFinal(textToEncrypt.getBytes(UTF_8));
@@ -96,7 +97,7 @@ public class CryptoFileService implements CryptoService {
                 IllegalBlockSizeException |
                 InvalidAlgorithmParameterException |
                 InvalidKeySpecException ex) {
-            Logger.getLogger(CryptoFileService.class.getName()).log(Level.SEVERE, null, ex);
+            logger.log(Level.SEVERE, null, ex);
         }
         return "";
     }
@@ -115,7 +116,7 @@ public class CryptoFileService implements CryptoService {
             bb.get(cipherText);
 
             SecretKey aesKeyFromPassword = getAESKeyFromPassword(password.toCharArray(), salt);
-            Cipher cipher = Cipher.getInstance(ENCRYPTION_ALGO);
+            Cipher cipher = Cipher.getInstance(ENCRYPTION_ALGORITHM);
             cipher.init(Cipher.DECRYPT_MODE, aesKeyFromPassword, new GCMParameterSpec(TAG_LENGTH_BIT, iv));
             byte[] plainText = cipher.doFinal(cipherText);
             return new String(plainText, UTF_8);
@@ -126,27 +127,36 @@ public class CryptoFileService implements CryptoService {
                 IllegalBlockSizeException |
                 InvalidAlgorithmParameterException |
                 InvalidKeySpecException ex) {
-            Logger.getLogger(CryptoFileService.class.getName()).log(Level.SEVERE, null, ex);
+            logger.log(Level.SEVERE, null, ex);
         }
         return "";
     }
 
+    /**
+     * Generates random cryptographic nonce
+     * @param length length of the byte array for the random nonce
+     * @return byte array representing the random nonce
+     */
     private byte[] generateRandomNonce(int length){
         byte[] nonce = new byte[length];
         new SecureRandom().nextBytes(nonce);
         return nonce;
     }
 
-    private SecretKey getAESKeyFromPassword(char[] password, byte[] salt)
-            throws NoSuchAlgorithmException, InvalidKeySpecException {
-
+    /**
+     * Get AES key based on provided password
+     * @param password password that is used to obtain the AES key
+     * @param salt salt that is used to obtain the AES key
+     * @return secret AES key
+     */
+    private SecretKey getAESKeyFromPassword(char[] password, byte[] salt) throws NoSuchAlgorithmException, InvalidKeySpecException {
         SecretKeyFactory factory = SecretKeyFactory.getInstance(KEY_CREATION_ALGORITHM);
         KeySpec spec = new PBEKeySpec(password, salt, ITERATION_COUNT, KEY_LENGTH);
-        return new SecretKeySpec(factory.generateSecret(spec).getEncoded(), BASE_ALGO);
+        return new SecretKeySpec(factory.generateSecret(spec).getEncoded(), BASE_ALGORITHM);
     }
 
     @Override
     public void writeFile(PasswordDatabase passwordDatabase) throws JsonConversionException {
         writeFile(passwordDatabase.getFile(), passwordDatabase.getPassword(), jsonService.toJson(passwordDatabase.getPasswords()));
-        }
+    }
 }
