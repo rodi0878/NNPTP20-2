@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.Objects;
 
 /**
- *
  * @author Roman
  */
 public class Password {
@@ -26,7 +25,7 @@ public class Password {
     private HashMap<String, Parameter> parameters;
     private ICategory category;
 
-    private Password(){
+    private Password() {
 
     }
 
@@ -44,7 +43,9 @@ public class Password {
         return password;
     }
 
-    public void setPassword(String newPassword) { this.password = newPassword; }
+    public void setPassword(String newPassword) {
+        this.password = newPassword;
+    }
 
     public HashMap<String, Parameter> getParameters() {
         return parameters;
