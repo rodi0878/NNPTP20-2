@@ -26,11 +26,19 @@ public class JSONFileService implements JSONService {
 
     @Override
     public String toJson(List<Password> passwords) throws JsonConversionException {
+        StringBuilder result = new StringBuilder();
+        result.append("[");
         try {
-            return objectMapper.writeValueAsString(passwords);
+            for (Password password : passwords) {
+                result.append(objectMapper.writeValueAsString(password));
+                result.append(",");
+            }
+            result.deleteCharAt(result.length() - 1);
+            result.append("]");
         } catch (JsonProcessingException e) {
             throw new JsonConversionException("Error during mapping Passwords to JSON.", e);
         }
+        return result.toString();
     }
 
     @Override
