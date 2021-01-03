@@ -104,7 +104,6 @@ public class JSONFileServiceTest {
                 .setParameters(null)
                 .createPassword());
         return passwords;
-
     }
 
 
@@ -129,13 +128,6 @@ public class JSONFileServiceTest {
         Password tikTokPass = PasswordDatabaseTest.preparePassword(4, "password4", "tiktok", "tiktok.com", "Password for social media");
         passwords.add(emailPass);
         passwords.add(tikTokPass);
-        try {
-            String json = jsonService.toJson(passwords);
-            System.out.println(json);
-            jsonService.fromJson(json);
-        } catch (JsonConversionException e) {
-            e.printStackTrace();
-        }
         return passwords;
     }
 }
