@@ -16,7 +16,6 @@ public class JSONFileServiceTest {
     private String jsonFormatWithoutParameters;
     private String jsonFormatWithParameters;
     private Password.PasswordBuilder builder = new Password.PasswordBuilder();
-    private List<Password> examplePasswordsList;
 
     @Before
     public void setUp() {
@@ -46,20 +45,6 @@ public class JSONFileServiceTest {
                 "]," +
                 "\"category\":null}" +
                 "]";
-
-        examplePasswordsList = new ArrayList<>();
-        examplePasswordsList.add(builder
-                .setId(0)
-                .setPassword("sdfghjkl")
-                .createPassword());
-        examplePasswordsList.add(builder
-                .setId(1)
-                .setPassword("ASDSAFafasdasdasdas")
-                .createPassword());
-        examplePasswordsList.add(builder
-                .setId(2)
-                .setPassword("aaa-aaaa-")
-                .createPassword());
     }
 
     @Test

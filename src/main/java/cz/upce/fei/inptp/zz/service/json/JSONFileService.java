@@ -10,8 +10,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cz.upce.fei.inptp.zz.entity.Password;
 import cz.upce.fei.inptp.zz.exception.JsonConversionException;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,7 +18,7 @@ import java.util.List;
  * @author Roman
  */
 public class JSONFileService implements JSONService {
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private static ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public String toJson(List<Password> passwords) throws JsonConversionException {
