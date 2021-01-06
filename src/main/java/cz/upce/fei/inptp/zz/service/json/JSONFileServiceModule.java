@@ -5,8 +5,7 @@ import com.google.inject.Singleton;
 
 /**
  * Dependency injector module for {@link JSONService} and {@link JSONFileService}.
- *
- * */
+ */
 public class JSONFileServiceModule extends AbstractModule {
     @Override
     protected void configure() {

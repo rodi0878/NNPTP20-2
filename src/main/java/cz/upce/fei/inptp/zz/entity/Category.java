@@ -10,7 +10,9 @@ import java.util.*;
 /**
  * Tree-based categories. Root category has the {@code  NullCategory} parent.
  */
+
 public class Category implements ICategory {
+
     private String name;
     private ICategory parent;
     private List<ICategory> children;

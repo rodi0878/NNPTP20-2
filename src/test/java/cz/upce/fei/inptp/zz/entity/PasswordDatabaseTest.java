@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.security.InvalidParameterException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -50,12 +49,12 @@ public class PasswordDatabaseTest {
         assertNull(outputPassword1);
     }
 
-    private Password preparePassword(int id, String password, String tittle, String website, String description) {
+    public static Password preparePassword(int id, String password, String tittle, String website, String description) {
         HashMap<String, Parameter> parameters = new HashMap<>();
         parameters.put(StandardizedParameters.TITLE, new TextParameter(tittle));
         parameters.put(StandardizedParameters.WEBSITE, new TextParameter(website));
         parameters.put(StandardizedParameters.DESCRIPTION, new TextParameter(description));
-        parameters.put(StandardizedParameters.EXPIRATION_DATETIME, new Parameter.DateTimeParameter(LocalDateTime.now().plusYears(1L)));
+        parameters.put(StandardizedParameters.EXPIRATION_DATETIME, null);
         return new Password.PasswordBuilder()
                 .setId(id)
                 .setPassword(password)

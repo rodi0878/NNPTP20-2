@@ -1,5 +1,6 @@
-package cz.upce.fei.inptp.zz.service.password;
+package cz.upce.fei.inptp.zz.password;
 
+import cz.upce.fei.inptp.zz.service.password.PasswordSecureGeneratorService;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

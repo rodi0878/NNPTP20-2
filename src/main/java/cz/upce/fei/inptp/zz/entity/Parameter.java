@@ -5,6 +5,9 @@
  */
 package cz.upce.fei.inptp.zz.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.time.LocalDateTime;
 
 /**
@@ -42,6 +45,7 @@ public class Parameter {
     }
     
     public static class DateTimeParameter extends Parameter {
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
         private LocalDateTime value;
 
         public DateTimeParameter() {

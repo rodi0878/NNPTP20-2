@@ -10,17 +10,15 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cz.upce.fei.inptp.zz.entity.Password;
 import cz.upce.fei.inptp.zz.exception.JsonConversionException;
-
 import java.util.List;
 
 /**
  * Service for creating JSON files.
  *
  * @author Roman
- *
  */
 public class JSONFileService implements JSONService {
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private static ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public String toJson(List<Password> passwords) throws JsonConversionException {
@@ -34,9 +32,10 @@ public class JSONFileService implements JSONService {
     @Override
     public List<Password> fromJson(String json) throws JsonConversionException {
         try {
-            return objectMapper.readValue(json, new TypeReference<List<Password>>() { });
+            return objectMapper.readValue(json, new TypeReference<List<Password>>() {
+            });
         } catch (JsonProcessingException e) {
-            throw new JsonConversionException("Error during converting JSON to Password entity.", e);
+            throw new JsonConversionException("Error during mapping Passwords to JSON.", e);
         }
     }
 }
