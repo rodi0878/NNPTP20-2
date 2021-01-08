@@ -50,6 +50,11 @@ public class NullCategory implements ICategory{
     }
 
     @Override
+    public boolean isNull() {
+        return true;
+    }
+
+    @Override
     public int compareTo(ICategory o) {
         return name.compareTo(o.getName());
     }

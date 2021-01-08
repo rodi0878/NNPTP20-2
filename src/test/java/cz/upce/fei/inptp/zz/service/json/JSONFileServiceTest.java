@@ -10,6 +10,8 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.mockito.Mockito.mock;
+
 public class JSONFileServiceTest {
 
     private JSONService jsonService = new JSONFileService();
@@ -49,6 +51,8 @@ public class JSONFileServiceTest {
 
     @Test
     public void toJson() throws JsonConversionException {
+        System.out.println(System.currentTimeMillis());
+
         String converted = jsonService.toJson(passwordsWithoutParameters());
         Assert.assertEquals(jsonFormatWithoutParameters, converted);
     }
@@ -71,7 +75,40 @@ public class JSONFileServiceTest {
         Assert.assertEquals(passwordsWithParameters(), convertedPasswords);
     }
 
+    @Test(expected = JsonConversionException.class)
+    public void testFromJsonShouldThrowException() throws JsonConversionException {
+        String wrongJsonData = "[{\"id\":0,\"password\":\"sdfghjkl\",\"parameters\":null,\"category\":null},team: \"Arsenal\"]";
+        jsonService.fromJson(wrongJsonData);
+    }
+
+    @Test(expected = JsonConversionException.class)
+    public void testToJsonShouldThrowException() throws JsonConversionException {
+        String wrongJsonData = "[{\"id\":0,\"password\":\"sdfghjkl\",\"parameters\":null,\"category\":null},team: \"Arsenal\"]";
+        List<Password> mockPasswords = mock(List.class);
+        jsonService.toJson(mockPasswords);
+    }
+
     private List<Password> passwordsWithoutParameters() {
+        List<Password> passwords = new ArrayList<>();
+        passwords.add(builder
+                .setId(0)
+                .setPassword("sdfghjkl")
+                .setParameters(null)
+                .createPassword());
+        passwords.add(builder
+                .setId(1)
+                .setPassword("ASDSAFafasdasdasdas")
+                .setParameters(null)
+                .createPassword());
+        passwords.add(builder
+                .setId(2)
+                .setPassword("aaa-aaaa-")
+                .setParameters(null)
+                .createPassword());
+        return passwords;
+    }
+
+    private List<Password> wrongpasswordsWithoutParameters() {
         List<Password> passwords = new ArrayList<>();
         passwords.add(builder
                 .setId(0)

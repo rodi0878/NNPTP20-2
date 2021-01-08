@@ -25,7 +25,6 @@ public class Category implements ICategory {
     }
 
 
-
     @Override
     public String getName() {
         return name;
@@ -57,6 +56,11 @@ public class Category implements ICategory {
     }
 
     @Override
+    public boolean isNull() {
+        return false;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Category)) return false;
@@ -72,11 +76,12 @@ public class Category implements ICategory {
 
     @Override
     public int compareTo(ICategory o) {
-        if (getName().compareTo(o.getName()) == 0){
-            return  getParent().compareTo(o.getParent());
+        if (getName().compareTo(o.getName()) == 0) {
+            return getParent().compareTo(o.getParent());
         }
         return getName().compareTo(o.getName());
     }
+
     public static class CategoryBuilder {
         private String name;
         private ICategory parent;

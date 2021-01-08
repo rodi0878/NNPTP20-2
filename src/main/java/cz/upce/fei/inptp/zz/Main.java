@@ -59,12 +59,12 @@ public class Main {
                         .setPassword(addCommand.getPassword().getPassword())
                         .createPassword();
 
-                List<Password> pwds = Arrays.asList(password);
+                List<Password> passwords = Arrays.asList(password);
 
                 passwordDatabase = new PasswordDatabase.PasswordDatabaseBuilder()
                         .setFile(addCommand.getPasswordFile())
                         .setPassword("password")
-                        .setPasswords(pwds)
+                        .setPasswords(passwords)
                         .createPasswordDatabase();
 
                 databaseService.savePasswordDatabase(passwordDatabase);

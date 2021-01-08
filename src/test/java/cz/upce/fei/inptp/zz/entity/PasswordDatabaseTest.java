@@ -65,10 +65,10 @@ public class PasswordDatabaseTest {
     @Test
     public void getPasswordByIdTest() throws InvalidParameterException {
         Password expectedPassword = new Password.PasswordBuilder()
-                        .setId(2)
-                        .setPassword("password3")
-                        .createPassword();
-        
+                .setId(2)
+                .setPassword("password3")
+                .createPassword();
+
         this.database.add(preparePassword(0, "password1", "email", "seznam.cz", "Password for my email"));
         this.database.add(preparePassword(1, "password2", "email", "gmail.com", "Password for my email"));
         this.database.add(preparePassword(2, "password3", "tiktok", "tiktok.com", "Password for social media"));
@@ -81,9 +81,9 @@ public class PasswordDatabaseTest {
     public void editPasswordTest() {
         String expectedPassword = "Password";
         Password password = new Password.PasswordBuilder()
-                        .setId(0)
-                        .setPassword("paswd")
-                        .createPassword();
+                .setId(0)
+                .setPassword("paswd")
+                .createPassword();
         password.setPassword("Password");
         assertEquals(password.getPassword(), expectedPassword);
     }
