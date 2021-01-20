@@ -9,7 +9,7 @@ public class CategoryTest extends TestCase {
     private Category differentCategory;
 
     @Override
-    public void setUp() {
+    public void setUp(){
         Category testRootCategory = new Category.CategoryBuilder()
                 .setName("test")
                 .setParent(NullCategory.getInstance())
@@ -51,20 +51,19 @@ public class CategoryTest extends TestCase {
     public void testHashCodeSame() {
         assertEquals(testCategory.hashCode(), controlCategory.hashCode());
     }
-
     public void testHashCodeDifferent() {
         assertNotSame(testCategory.hashCode(), differentCategory.hashCode());
     }
 
-    public void testCompareToSame() {
+    public void testCompareToSame(){
         assertEquals(0, testCategory.compareTo(controlCategory));
     }
 
-    public void testCompareToLesser() {
-        assertTrue(differentCategory.compareTo(testCategory) < 0);
+    public void testCompareToLesser(){
+        assertTrue(differentCategory.compareTo(testCategory) <0);
     }
 
-    public void testCompareToGreater() {
-        assertTrue(testCategory.compareTo(differentCategory) > 0);
+    public void testCompareToGreater(){
+        assertTrue(testCategory.compareTo(differentCategory) >0);
     }
 }
