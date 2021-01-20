@@ -19,7 +19,7 @@ public class PasswordDatabase {
     private File file;
     private String password;
     
-    private List<Password> passwords;
+    private List<Password> passwords = new ArrayList<>();
 
     private PasswordDatabase(File file, String password, List<Password> passwords) {
         this.file = file;

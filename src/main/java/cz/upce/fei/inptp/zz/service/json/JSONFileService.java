@@ -32,7 +32,7 @@ public class JSONFileService implements JSONService {
     @Override
     public List<Password> fromJson(String json) throws JsonConversionException {
         try {
-            return objectMapper.readValue(json, new TypeReference<>() {
+            return objectMapper.readValue(json, new TypeReference<List<Password>>() {
             });
         } catch (JsonProcessingException e) {
             throw new JsonConversionException("Error during mapping Passwords to JSON.", e);

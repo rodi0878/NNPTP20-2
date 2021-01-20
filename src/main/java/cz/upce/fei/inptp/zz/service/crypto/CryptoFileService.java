@@ -25,6 +25,7 @@ import javax.inject.Inject;
 
 /**
  * Service for creating encrypted files.
+ *
  */
 public class CryptoFileService implements CryptoService {
 
@@ -50,11 +51,10 @@ public class CryptoFileService implements CryptoService {
 
     @Override
     public String readFile(File file, String password) {
-        try (
-                InputStream fileInputStream = new FileInputStream(file);
-                DataInputStream dataInputStream = new DataInputStream(fileInputStream)
-        ) {
+        try (InputStream fileInputStream = new FileInputStream(file)) {
+            DataInputStream dataInputStream = new DataInputStream(fileInputStream);
             String stringFromFile = dataInputStream.readUTF();
+            dataInputStream.close();
             return decrypt(password, stringFromFile);
         } catch (IOException ex) {
             logger.log(Level.SEVERE, null, ex);
@@ -64,18 +64,17 @@ public class CryptoFileService implements CryptoService {
 
     @Override
     public void writeFile(File file, String password, String textForWrite) {
-        try (
-                OutputStream fileOutputStream = new FileOutputStream(file);
-                DataOutputStream dataOutputStream = new DataOutputStream(fileOutputStream);
-        ) {
+        try (OutputStream fileOutputStream = new FileOutputStream(file)) {
+            DataOutputStream dataOutputStream = new DataOutputStream(fileOutputStream);
             dataOutputStream.writeUTF(encrypt(password, textForWrite));
+            dataOutputStream.close();
         } catch (IOException ex) {
             logger.log(Level.SEVERE, null, ex);
         }
     }
 
     @Override
-    public String encrypt(String password, String textToEncrypt) {
+    public String encrypt(String password, String textToEncrypt){
         try {
             byte[] salt = generateRandomNonce(SALT_LENGTH_BYTE);
             byte[] iv = generateRandomNonce(IV_LENGTH_BYTE);
@@ -104,7 +103,7 @@ public class CryptoFileService implements CryptoService {
     }
 
     @Override
-    public String decrypt(String password, String textToDecrypt) {
+    public String decrypt(String password, String textToDecrypt){
         try {
             byte[] decode = Base64.getDecoder().decode(textToDecrypt.getBytes(UTF_8));
 
@@ -121,7 +120,7 @@ public class CryptoFileService implements CryptoService {
             cipher.init(Cipher.DECRYPT_MODE, aesKeyFromPassword, new GCMParameterSpec(TAG_LENGTH_BIT, iv));
             byte[] plainText = cipher.doFinal(cipherText);
             return new String(plainText, UTF_8);
-        } catch (NoSuchAlgorithmException |
+        }catch (NoSuchAlgorithmException |
                 NoSuchPaddingException |
                 InvalidKeyException |
                 BadPaddingException |
@@ -135,11 +134,10 @@ public class CryptoFileService implements CryptoService {
 
     /**
      * Generates random cryptographic nonce
-     *
      * @param length length of the byte array for the random nonce
      * @return byte array representing the random nonce
      */
-    private byte[] generateRandomNonce(int length) {
+    private byte[] generateRandomNonce(int length){
         byte[] nonce = new byte[length];
         new SecureRandom().nextBytes(nonce);
         return nonce;
@@ -147,9 +145,8 @@ public class CryptoFileService implements CryptoService {
 
     /**
      * Get AES key based on provided password
-     *
      * @param password password that is used to obtain the AES key
-     * @param salt     salt that is used to obtain the AES key
+     * @param salt salt that is used to obtain the AES key
      * @return secret AES key
      */
     private SecretKey getAESKeyFromPassword(char[] password, byte[] salt) throws NoSuchAlgorithmException, InvalidKeySpecException {

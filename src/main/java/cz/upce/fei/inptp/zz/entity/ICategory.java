@@ -18,6 +18,4 @@ public interface ICategory extends Comparable<ICategory> {
     List<ICategory> getChildren();
 
     void setChildren(List<ICategory> children);
-
-    boolean isNull();
 }
