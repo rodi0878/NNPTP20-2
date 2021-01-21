@@ -10,26 +10,26 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 /**
- *
  * @author Roman
  */
 public class PasswordTest {
     private Password password;
-    
+
     public PasswordTest() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
     public void setUp() {
         password = new Password.PasswordBuilder()
@@ -37,7 +37,7 @@ public class PasswordTest {
                 .setPassword("abcd%123")
                 .createPassword();
     }
-    
+
     @After
     public void tearDown() {
     }
@@ -67,12 +67,12 @@ public class PasswordTest {
     }
 
     @Test
-    public void setPasswordTest(){
+    public void setPasswordTest() {
         String expectedPassword = "Password";
         Password password = new Password.PasswordBuilder()
-                        .setId(0)
-                        .setPassword("paswd")
-                        .createPassword();
+                .setId(0)
+                .setPassword("paswd")
+                .createPassword();
         password.setPassword("Password");
         assertEquals(password.getPassword(), expectedPassword);
     }
